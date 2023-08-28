@@ -1,0 +1,89 @@
+.home {
+    height: 100vh;
+    background: linear-gradient(45deg, #02001f, #000215);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.home>div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.messages {
+    max-width: 800px;
+    background-color: #26283e5e;
+    color: white;
+    overflow-y: auto;
+    margin: 0px auto;
+    display: flex;
+    flex-direction: column;
+    height: 70vh;
+    width: 100%;
+}
+
+.sent,
+.received {
+    display: flex;
+    margin: 5px 10px;
+    background: #622765;
+    border: 2px solid black;
+    border-radius: 5px;
+    max-width: 50%;
+    width: fit-content;
+    padding: 5px 10px;
+}
+
+.sent {
+    align-self: flex-end;
+}
+
+.received {
+    align-self: flex-start;
+}
+
+.sent>div:nth-child(2),
+.received>div:nth-child(2) {
+    margin: 0px 5px;
+}
+
+.send {
+    display: flex;
+    align-items: center;
+    max-width: 800px;
+    margin: 0px auto;
+    width: 100%;
+}
+
+.send input {
+    padding: 5px 10px;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid black;
+    width: 100%;
+    background: #1d1134;
+    color: white;
+}
+
+.submit {
+    width: fit-content !important;
+    height: fit-content !important;
+}
+
+.joinMessage {
+    margin: 2px auto;
+    padding: 5px;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: 500;
+    font-style: italic;
+}
+
+.logo{
+    color: white;
+    font-size: 30px;
+    text-align: center;
+    padding: 10px;
+}
