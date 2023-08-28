@@ -5,9 +5,9 @@ const port = process.env.PORT || 5000;
 const cors = require('cors');
 const io = require('socket.io')(server,{
     cors: {
-      origin: "http://localhost:5173",
-      allowedHeaders: ["my-custom-header"],
-      credentials: true
+      origin: "*",
+      allowedHeaders: "*",
+      credentials: false
     }
   });
 

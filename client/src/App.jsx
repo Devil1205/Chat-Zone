@@ -9,7 +9,7 @@ function App() {
   // const socket = socketIO.connect("http://localhost:5000");
   // const socket = socketIO.connect("https://chat-zone-qu4q.onrender.com");
   const socket = socketIO.connect("https://chat-zone.vercel.app/",{
-    withCredentials: true,
+    withCredentials: false,
     extraHeaders: {
       "my-custom-header": "abcd"
     }
