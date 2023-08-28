@@ -3,17 +3,7 @@ const app = express();
 const server = require('http').createServer(app);
 const port = process.env.PORT || 5000;
 const cors = require('cors');
-const io = require('socket.io')(server,{
-    handlePreflightRequest: (req, res) => {
-        const headers = {
-            "Access-Control-Allow-Headers": "Content-Type, Authorization",
-            "Access-Control-Allow-Origin": '*', //or the specific origin you want to give access to,
-            "Access-Control-Allow-Credentials": true
-        };
-        res.writeHead(200, headers);
-        res.end();
-    }
-    });
+const io = require('socket.io')(server,{cors: {origin: "*"}});
 
 app.use(cors());
 const user = {};

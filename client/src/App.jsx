@@ -7,7 +7,7 @@ import socketIO from 'socket.io-client';
 function App() {
   // console.log(socket);
   // const socket = socketIO.connect("http://localhost:5000");
-  const socket = socketIO.connect("https://vercel.com/devil1205/chat-zone");
+  const socket = socketIO.connect("https://vercel.com/devil1205/chat-zone",{});
 
   return (
     <Router>
