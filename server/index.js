@@ -7,15 +7,9 @@ const { Server } = require("socket.io");
 app.use(cors());
 const io = new Server(server,{
     cors: {
-      origin: "*",
-      handlePreflightRequest: (req,res)=>{
-        res.writeHead(200,{
-            "Access-Control-Allow-origin":"*",
-            "Access-Control-Allow-Methods":"GET,POST",
-            "Access-Control-Allow-Headers": "my-custom-header"
-        })
+        origin: "http://localhost:5173",
+        credentials: true
       }
-    }
   });
 
 const user = {};

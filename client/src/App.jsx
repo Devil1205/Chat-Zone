@@ -9,15 +9,7 @@ function App() {
   // const socket = socketIO.connect("http://localhost:5000");
   // const socket = socketIO.connect("https://chat-zone-qu4q.onrender.com");
   const socket = socketIO("https://chat-zone.vercel.app",
-  {
-    withCredentials: false,
-    transportOptions: {
-      polling: {
-        extraHeaders: {
-          "my-custom-header" : "abcd"
-        }
-      }
-    }
+  { transports: ['websocket', 'polling', 'flashsocket']
   });
 
   return (
