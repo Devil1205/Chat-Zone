@@ -2,15 +2,15 @@ const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const port = process.env.PORT || 5000;
-// const cors = require('cors');
-const io = require('socket.io')(server,{
+const cors = require('cors');
+const { Server } = require("socket.io");
+const io = new Server(server,{
     cors: {
-      origins: ["https://chat-zone-frontend.vercel.app"],
-      methods: ["GET","POST"]
+      origin: "*"
     }
   });
 
-// app.use(cors());
+app.use(cors());
 const user = {};
 
 io.on('connection', socket =>{
