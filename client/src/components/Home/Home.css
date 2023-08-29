@@ -4,12 +4,17 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    padding: 10px 0px;
 }
 
 .home>div{
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.home>div:nth-child(2){
+    height: 100%;
 }
 
 .messages {
@@ -20,20 +25,24 @@
     margin: 0px auto;
     display: flex;
     flex-direction: column;
-    height: 70vh;
+    height: 100%;
     width: 100%;
 }
 
 .sent,
 .received {
-    display: flex;
     margin: 5px 10px;
     background: #622765;
     border: 2px solid black;
     border-radius: 5px;
-    max-width: 50%;
+    max-width: 70%;
     width: fit-content;
     padding: 5px 10px;
+}
+
+.sent span, .received span{
+    font-size: 16px;
+    font-weight: 500;
 }
 
 .sent {
@@ -42,11 +51,6 @@
 
 .received {
     align-self: flex-start;
-}
-
-.sent>div:nth-child(2),
-.received>div:nth-child(2) {
-    margin: 0px 5px;
 }
 
 .send {
@@ -65,11 +69,13 @@
     width: 100%;
     background: #1d1134;
     color: white;
+    height: 100%;
 }
 
 .submit {
     width: fit-content !important;
     height: fit-content !important;
+    border-radius: 5px!important;
 }
 
 .joinMessage {

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import './Home.css';
 import { useLocation, useNavigate } from 'react-router-dom';
+import SendIcon from '@mui/icons-material/Send';
 
 function Home({ socket }) {
 
@@ -11,10 +12,7 @@ function Home({ socket }) {
 
     const appendMessage = (name, message, state) => {
         const messages = document.querySelector('.messages');
-        const newMessage = `<div class=${state}>
-                <div>${name} :</div>
-                <div>${message}</div>
-            </div>`;
+        const newMessage = `<div class=${state}><span>${name} : </span> ${message}</div>`;
         messages.innerHTML += newMessage;
     }
 
@@ -35,7 +33,7 @@ function Home({ socket }) {
             socket.on('user-joined', ({ name, message }) => {
                 joinMessage(name, message);
             })
-            
+
             socket.on('receivedMessage', ({ name, message }) => {
                 appendMessage(name, message, "received");
             })
@@ -70,7 +68,7 @@ function Home({ socket }) {
                 </div>
                 <form className="send" onSubmit={sendMessage}>
                     <input id="sendMessage" type="text" placeholder='chat' />
-                    <button className="btn btn-primary submit" type="submit" >Send</button>
+                    <button className="btn btn-primary submit" type="submit" ><SendIcon fontSize='medium' /></button>
                 </form>
             </div>
         </div>
