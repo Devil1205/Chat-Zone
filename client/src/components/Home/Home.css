@@ -13,7 +13,7 @@
     justify-content: center;
 }
 
-.home>div:nth-child(2){
+.home .container{
     height: 100%;
 }
 
@@ -92,4 +92,35 @@
     font-size: 30px;
     text-align: center;
     padding: 10px;
+}
+
+.online{
+    background: #540e72d9;
+    border-radius: 5px;
+    position: absolute;
+    font-size: 20px;
+    max-height: 80%;
+    max-width: 70%;
+    overflow-y: auto;
+    overflow-x: visible;
+    min-width: 20px;
+}
+
+.users{
+    width: 0px;
+    height: 0px;
+    max-width: inherit;
+    transition: 0.5s all ease-in-out;
+    color: white;
+    overflow: hidden;
+    margin: 20px 0px 0px 10px;
+}
+    
+#onlineBtn{
+    border-radius: 59%;
+    background: #0dff00;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 0;
 }

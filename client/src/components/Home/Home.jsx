@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Home.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
@@ -7,7 +7,7 @@ function Home({ socket }) {
 
 
     const navigate = useNavigate();
-    const location = useLocation();
+    const [users, setUsers] = useState([]);
     const name = localStorage.getItem('name');
 
     const appendMessage = (name, message, state) => {
@@ -16,11 +16,34 @@ function Home({ socket }) {
         messages.innerHTML += newMessage;
     }
 
-    const joinMessage = (name, message) => {
+    const joinMessage = async (name, message) => {
         const messages = document.querySelector('.messages');
+        try{
+        const response = await fetch("https://chat-zone-qu4q.onrender.com/ChatZoneAPI/online-users");
+        const responsJson = await response.json();
+        setUsers(responsJson.users);
+        }
+        catch(e){
+            console.log(e);
+        }
         const newMessage = `<div class="joinMessage">${name} ${message}
             </div>`;
         messages.innerHTML += newMessage;
+    }
+
+    const onlineUsers = () => {
+        const online = document.querySelector('.users');
+        console.log("online");
+        if (online.style.width === "0px")
+        {
+            online.style.width = "250px";
+            online.style.height = "300px";
+        }
+        else
+        {
+            online.style.width = "0px";
+            online.style.height = "0px";
+        }
     }
 
     useEffect(() => {
@@ -60,6 +83,21 @@ function Home({ socket }) {
 
     return (
         <div className='home'>
+            <div className="online">
+                <div id="onlineBtn" onClick={onlineUsers}></div>
+                <div className="users">
+                    <h3>Online Users</h3>
+                    <div>
+                        {
+                            users.map((user,index) => {
+                                return(
+                                    <div key={index}>{index+1}. {user}</div>
+                                )
+                            })
+                        }
+                    </div>
+                </div>
+            </div>
             <div className="logo">
                 Welcome To Chat-Zone
             </div>

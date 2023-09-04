@@ -4,12 +4,13 @@ const server = require('http').createServer(app);
 const port = process.env.PORT || 5000;
 const cors = require('cors');
 const { Server } = require("socket.io");
+app.use(express.json());
 app.use(cors());
 const io = new Server(server,{
     cors: {
         origin: "*",
-      }
-  });
+    }
+});
 
 const user = {};
 
@@ -30,6 +31,11 @@ io.on('connection', socket =>{
         delete user[socket.id];
         socket.emit('user-left',{name: "You", message: "left"});
     })
+})
+
+app.get('/ChatZoneAPI/online-users', (req,res)=>{
+    const onlineUsers = Object.values(user);
+    res.status(200).json({users: onlineUsers});
 })
 
 
