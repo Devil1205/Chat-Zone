@@ -1,0 +1,63 @@
+.mChat-Home{
+    background-color: white;
+    display: flex;
+}
+
+.mChat-Home .chats{
+    background: #ede7ff;
+    max-width: 500px;
+    width: 50%;
+    border-radius: 5px;
+    padding: 10px 0px;
+    font-size: 20px;
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+}
+
+.mChat-Home .chats > div{
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 2px solid lightgrey;
+}
+
+.mChat-Home .chat{
+    /* background-color: red; */
+    background: #26283e5e;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.mChat-Home .chat .messages{
+    max-width: 100%;
+    background-color: transparent;
+    height: calc(100% - 60px);
+}
+
+.mChat-Home .chat .messages .sent{
+    background-color: #3c7a3c;
+}
+
+.mChat-Home .chat .messages .received{
+    background-color: #6659ad;
+}
+
+.mChat-send {
+    display: flex;
+    width: 100%;
+    padding: 10px;
+}
+
+.mChat-send input {
+    padding: 5px 10px;
+    outline: none;
+    border-radius: 5px;
+    border: 0px solid black;
+    width: 100%;
+}
+
+/* .submit {
+    width: fit-content !important;
+    height: fit-content !important;
+    border-radius: 5px!important;
+} */
+

@@ -18,7 +18,7 @@ function SetPassword({ base_URL, setShowNavbar, showNavbar, message, updateMessa
             return ;
         }
         try {
-            const response = await fetch(base_URL + `/quotifyAuthAPI/setPassword/${token}`,
+            const response = await fetch(base_URL + `/mChatAuthAPI/setPassword/${token}`,
                 {
                     method: "POST",
                     body: JSON.stringify({password}),

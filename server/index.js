@@ -4,8 +4,12 @@ const server = require('http').createServer(app);
 const port = process.env.PORT || 5000;
 const cors = require('cors');
 const { Server } = require("socket.io");
+require('./db/connectDB')
+
+app.use(cors({
+    origin:'*'
+}))
 app.use(express.json());
-app.use(cors());
 const io = new Server(server,{
     cors: {
         origin: "*",
@@ -38,6 +42,11 @@ app.get('/ChatZoneAPI/online-users', (req,res)=>{
     res.status(200).json({users: onlineUsers});
 })
 
+//mChat
+app.use('/mChatAuthAPI',require('./routes/user/createUser'));
+app.use('/mChatAuthAPI',require('./routes/user/loginUser'));
+app.use('/mChatAuthAPI',require('./routes/user/verifyUser'));
+app.use('/mChatAuthAPI',require('./routes/user/forgotPassword'));
 
 server.listen(port, ()=>{
     console.log("Listening on port "+port);

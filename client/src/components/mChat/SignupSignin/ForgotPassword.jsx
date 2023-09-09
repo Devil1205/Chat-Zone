@@ -11,7 +11,7 @@ function ForgotPassword({ base_URL, setShowNavbar, showNavbar, message, updateMe
             e.preventDefault();
             const email = document.querySelectorAll('.login input')[0].value;
             const front_URL = window.location.origin+'/#/setPassword';
-            const response = await fetch(base_URL + '/quotifyAuthAPI/forgotPassword',
+            const response = await fetch(base_URL + '/mChatAuthAPI/forgotPassword',
                 {
                     method: "POST",
                     body: JSON.stringify({ front_URL, email }),
