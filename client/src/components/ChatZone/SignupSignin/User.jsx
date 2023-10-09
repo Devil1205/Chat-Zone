@@ -1,20 +1,30 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import './Main.css'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-function User() {
+function User({ setShowNavbar }) {
     const navigate = useNavigate();
     //login user
     const loginUser = async (e) => {
         e.preventDefault();
         const name = document.querySelectorAll('.login input')[0].value;
         localStorage.setItem('name', name);
-        navigate('/');
+        navigate('/chat-zone');
     }
+
+    useEffect(() => {
+        setShowNavbar(false);
+        return ()=>{
+        setShowNavbar(true);
+      }
+    }, [])
+
 
 
     return (
         <div className="user">
+            <div className="backButton" onClick={() => { navigate(-1) }}><ArrowBackIcon fontSize='large' sx={{ color: "white" }} /></div>
             <div className="wrapper">
                 <div className="title-text">
                     <div className="title login">Login Form</div>

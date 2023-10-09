@@ -3,7 +3,6 @@ import Home from './components/Home/Home';
 import ChatZoneUser from './components/ChatZone/SignupSignin/User';
 import ChatZoneHome from './components/ChatZone/Home/Home';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import socketIO from 'socket.io-client';
 import { useState } from 'react';
 import MChatUser from './components/mChat/SignupSignin/User';
 import MChatHome from './components/mChat/Home/Home';
@@ -15,7 +14,6 @@ function App() {
   
   const base_URL = "http://localhost:5000";
   // const base_URL = "https://chat-zone-qu4q.onrender.com";
-  const socket = socketIO.connect(base_URL,{ transports: ['websocket']});
 
   const [message, setMessage] = useState("");
   const [showNavbar, setShowNavbar] = useState(true);
@@ -49,13 +47,13 @@ function App() {
     <Router>
       {showNavbar && <Navbar base_URL={base_URL} verifyUser={verifyUser} message={message} updateMessage={updateMessage} />}
       <Routes>
-        <Route exact path="/" element={<Home base_URL={base_URL} setShowNavbar={setShowNavbar} showNavbar={showNavbar} />} />
-        <Route exact path ="/chat-zone/" element={<ChatZoneHome socket={socket} / >} />
-        <Route exact path ="/chat-zone/user" element={<ChatZoneUser />} />
-        <Route exact path="/mChat/" element={<MChatHome base_URL={base_URL}/>} />
-        <Route exact path="/mChat/user" element={<MChatUser base_URL={base_URL} setShowNavbar={setShowNavbar} showNavbar={showNavbar} message={message} updateMessage={updateMessage}/>} />
-        <Route exact path="/mChat/forgotPassword" element={<ForgotPassword base_URL={base_URL} setShowNavbar={setShowNavbar} showNavbar={showNavbar} message={message} updateMessage={updateMessage}/>} />
-        <Route exact path="/mChat/setPassword/:token" element={<SetPassword base_URL={base_URL} setShowNavbar={setShowNavbar} showNavbar={showNavbar} message={message} updateMessage={updateMessage}/>} />
+        <Route exact path="/" element={<Home base_URL={base_URL} setShowNavbar={setShowNavbar} />} />
+        <Route exact path ="/chat-zone/" element={<ChatZoneHome base_URL={base_URL} setShowNavbar={setShowNavbar} / >} />
+        <Route exact path ="/chat-zone/user" element={<ChatZoneUser setShowNavbar={setShowNavbar} />} />
+        <Route exact path="/mChat/" element={<MChatHome setShowNavbar={setShowNavbar} base_URL={base_URL}/>} />
+        <Route exact path="/mChat/user" element={<MChatUser base_URL={base_URL} setShowNavbar={setShowNavbar} message={message} updateMessage={updateMessage}/>} />
+        <Route exact path="/mChat/forgotPassword" element={<ForgotPassword base_URL={base_URL} setShowNavbar={setShowNavbar} message={message} updateMessage={updateMessage}/>} />
+        <Route exact path="/mChat/setPassword/:token" element={<SetPassword base_URL={base_URL} setShowNavbar={setShowNavbar} message={message} updateMessage={updateMessage}/>} />
       </Routes>
     </Router>
   )

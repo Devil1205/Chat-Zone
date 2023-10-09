@@ -20,6 +20,15 @@
     border-bottom: 2px solid lightgrey;
 }
 
+.mChat-Home .chats > div > div{
+    height: 35px;
+    overflow: hidden;
+}
+
+.mChat-Home .chats > div:hover{
+    background-color: rgb(211, 209, 209);
+}
+
 .mChat-Home .chat{
     /* background-color: red; */
     background: #26283e5e;

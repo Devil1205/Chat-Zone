@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../../models/userSchema');
 const bcrypt = require('bcryptjs');
 const jwt_secret = process.env.JWT_SECRET;
+console.log(jwt_secret);
 const jwt = require('jsonwebtoken');
 
 //loginUser Route
@@ -35,6 +36,7 @@ router.post('/login',
         }
         catch (e) {
             // console.log(e);
+            console.log(e);
             res.status(500).json({ error: "Internal server error" });
         }
     })

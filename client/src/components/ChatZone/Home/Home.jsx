@@ -2,46 +2,46 @@ import React, { useEffect, useState } from 'react';
 import './Home.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import socketIO from 'socket.io-client';
 
-function Home({ socket }) {
-
-
+function Home({ setShowNavbar, base_URL }) {
+    
+    let socket;
     const navigate = useNavigate();
     const [users, setUsers] = useState([]);
     const name = localStorage.getItem('name');
-
+    
     const appendMessage = (name, message, state) => {
         const messages = document.querySelector('.messages');
         const newMessage = `<div class=${state}><span>${name} : </span> ${message}</div>`;
         messages.innerHTML += newMessage;
     }
-
+    
     const joinMessage = async (name, message) => {
         const messages = document.querySelector('.messages');
-        try{
-        // const response = await fetch("https://chat-zone-qu4q.onrender.com/ChatZoneAPI/online-users");
-        const response = await fetch("http://localhost:5000/ChatZoneAPI/online-users");
-        const responsJson = await response.json();
-        setUsers(responsJson.users);
+        try {
+            // const response = await fetch("https://chat-zone-qu4q.onrender.com/ChatZoneAPI/online-users");
+            const response = await fetch("http://localhost:5000/ChatZoneAPI/online-users");
+            const responsJson = await response.json();
+            setUsers(responsJson.users);
         }
-        catch(e){
+        catch (e) {
             console.log(e);
         }
         const newMessage = `<div class="joinMessage">${name} ${message}
-            </div>`;
+        </div>`;
         messages.innerHTML += newMessage;
     }
 
     const onlineUsers = () => {
         const online = document.querySelector('.users');
         console.log("online");
-        if (online.style.width === "0px")
-        {
+        if (online.style.width === "0px") {
             online.style.width = "250px";
             online.style.height = "300px";
         }
-        else
-        {
+        else {
             online.style.width = "0px";
             online.style.height = "0px";
         }
@@ -49,11 +49,15 @@ function Home({ socket }) {
 
     useEffect(() => {
 
+        setShowNavbar(false);
+        socket = socketIO.connect(base_URL+"/chat-zone",{ transports: ['websocket']});
+
+
         if (name === null)
-            navigate('/user');
+            navigate('/chat-zone/user');
         else {
             socket.emit("new-user-joined", name);
-
+            
             socket.on('user-joined', ({ name, message }) => {
                 joinMessage(name, message);
             })
@@ -70,6 +74,9 @@ function Home({ socket }) {
             })
         }
         localStorage.clear();
+        return () => {
+            setShowNavbar(true);
+        }
     }, [socket])
 
 
@@ -84,15 +91,16 @@ function Home({ socket }) {
 
     return (
         <div className='home'>
+            <div className="backButton" onClick={() => { navigate(-1) }}><ArrowBackIcon fontSize='large' sx={{ color: "white" }} /></div>
             <div className="online">
                 <div id="onlineBtn" onClick={onlineUsers}></div>
                 <div className="users">
                     <h3>Online Users</h3>
                     <div>
                         {
-                            users.map((user,index) => {
-                                return(
-                                    <div key={index}>{index+1}. {user}</div>
+                            users.map((user, index) => {
+                                return (
+                                    <div key={index}>{index + 1}. {user}</div>
                                 )
                             })
                         }

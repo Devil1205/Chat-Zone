@@ -10,13 +10,13 @@ function Navbar({ verifyUser, message, updateMessage }) {
 
     useEffect(() => {
 
-        (async () => {
-            const result = await verifyUser();
-            // console.log(result);
-            if (result !== false) {
-                setUser(result);
-            }
-        })();
+        // (async () => {
+        //     const result = await verifyUser();
+        //     // console.log(result);
+        //     if (result !== false) {
+        //         setUser(result);
+        //     }
+        // })();
     }, [])
 
     const logoutUser = ()=>{

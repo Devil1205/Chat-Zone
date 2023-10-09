@@ -3,6 +3,7 @@ const jwt_secret = process.env.JWT_SECRET;
 
 const fetchUser = async (req,res,next)=>{
     const authToken = req.header('auth-token');
+    // console.log(authToken);
     if(!authToken)
     {
         return res.status(401).json({error: "Unautharized access. Please kindly login."});

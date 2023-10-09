@@ -29,22 +29,23 @@ function User({ base_URL, setShowNavbar, showNavbar, message, updateMessage }) {
             password
         };
         try {
-            const response = await fetch(base_URL + '/mChatAuthAPI/login',
-                {
-                    method: "POST",
-                    body: JSON.stringify(data),
-                    headers: { "content-type": "application/json" }
-                })
-            //Navigate user to his account if credentials are correct
-            const responseJson = await response.json();
-            // console.log(responseJson);
-            if (response.status === 200) {
-                localStorage.setItem('auth-token', JSON.stringify({ user: responseJson.user.name, token: responseJson.authToken }));
-                navigate('/');
-            }
-            else {
-                updateMessage("error", responseJson.error);
-            }
+            navigate('/mChat');
+            // const response = await fetch(base_URL + '/mChatAuthAPI/login',
+            //     {
+            //         method: "POST",
+            //         body: JSON.stringify(data),
+            //         headers: { "content-type": "application/json" }
+            //     })
+            // //Navigate user to his account if credentials are correct
+            // const responseJson = await response.json();
+            // // console.log(responseJson);
+            // if (response.status === 200) {
+            //     localStorage.setItem('auth-token', JSON.stringify({ user: responseJson.user.name, token: responseJson.authToken }));
+            //     navigate('/mChat');
+            // }
+            // else {
+            //     updateMessage("error", responseJson.error);
+            // }
             // console.log(responseJson);
         }
         catch (error) {
