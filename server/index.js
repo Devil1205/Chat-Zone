@@ -22,6 +22,7 @@ module.exports = io;
 app.use(require('./routes/chat-zone/socket'));
 
 //mChat
+require('./routes/mChat/socket');
 app.use('/mChatAuthAPI',require('./routes/user/createUser'));
 app.use('/mChatAuthAPI',require('./routes/user/loginUser'));
 app.use('/mChatAuthAPI',require('./routes/user/verifyUser'));

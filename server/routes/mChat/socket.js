@@ -1,8 +1,18 @@
 const io = require('../../index');
+const fetch = require('node-fetch');
 
-io.of('mChat').on('connection', socket=>{
+const sockets = {};
 
-    socket.on('new-user-joined', message=>{
-        socket.broadcast.emit('user-online',true);
+io.of('/mChat').on('connection', socket=>{
+    // console.log(socket);
+        
+        socket.on('user-chat', async ({receiver,sender})=>{
+            sockets[sender]=socket.id;
+            // console.log(sockets);
+        })
+        
+        socket.on('sent', message=>{
+            socket.to(sockets[message.receiver]).emit('received',message);
+            // console.log(message.receiver);
     })
 })

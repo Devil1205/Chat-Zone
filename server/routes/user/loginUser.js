@@ -3,7 +3,6 @@ const router = express.Router();
 const User = require('../../models/userSchema');
 const bcrypt = require('bcryptjs');
 const jwt_secret = process.env.JWT_SECRET;
-console.log(jwt_secret);
 const jwt = require('jsonwebtoken');
 
 //loginUser Route

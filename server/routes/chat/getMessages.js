@@ -41,7 +41,10 @@ router.post('/messages', fetchUser, [
 
 
     //finding that particular uesr chat
-    return res.json(senderExists.user.receiver[receiverIndex].messages);
+    // const temp=[{receiver}].concat(senderExists.user.receiver[receiverIndex].messages);
+    const temp={messages: senderExists.user.receiver[receiverIndex].messages, receiver};
+    // console.log(temp);
+    return res.json(temp);
 
 })
 

@@ -19,13 +19,14 @@ const saveMessage = async(userId,receiver,content,type)=>{
             }]
         }
     });
+    const newMessage = message.user.receiver[0].messages[0];
     
     //checking if sender already exists in db
     const senderExists = await Message.findOne({'user.id': userId});
     if(!senderExists)
     {
         await message.save();
-        return ({message: "Sender added successfully"});
+        return (newMessage);
     }
     
 
@@ -45,15 +46,15 @@ const saveMessage = async(userId,receiver,content,type)=>{
     {
         const updatedReceiver = senderExists.user.receiver.concat(message.user.receiver[0]);
         // console.log(updatedReceiver);   
-        const temp = await Message.findOneAndUpdate({'user.id': userId}, {'user.receiver': updatedReceiver} );
-        return ({message: "Receiver added successfully"});
+        await Message.findOneAndUpdate({'user.id': userId}, {'user.receiver': updatedReceiver} );
+        return (newMessage);
     }
     
 
     //append new message to already existing chat
     senderExists.user.receiver[receiverIndex].messages = senderExists.user.receiver[receiverIndex].messages.concat(message.user.receiver[0].messages[0]);
     await senderExists.save();
-    return ({message: "Message sent successfully"});
+    return (newMessage);
 }
 
 router.post('/send', fetchUser, [
@@ -76,9 +77,10 @@ router.post('/send', fetchUser, [
         return res.status(404).json({messgae: "User doesn't exist"});
 
     //calling api for sender message
-    await saveMessage(req.user.id,receiver,content,type);
-    // await saveMessage(receiver,req.user.id,content,type==="sent"?"received":"sent");
-    return res.status(200).json({message: "Message sent successfully"})
+    const newMessage = await saveMessage(req.user.id,receiver,content,type);
+    // console.log(newMessage)
+    await saveMessage(receiver,req.user.id,content,"received");
+    return res.status(200).json(newMessage);
 })
 
 module.exports = router;

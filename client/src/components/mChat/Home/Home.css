@@ -1,31 +1,33 @@
 .mChat-Home{
     background-color: white;
     display: flex;
+    height: calc(100vh - 80px);
 }
 
 .mChat-Home .chats{
     background: #ede7ff;
     max-width: 500px;
     width: 50%;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     padding: 10px 0px;
     font-size: 20px;
-    height: calc(100vh - 80px);
+    height: inherit;
     overflow-y: auto;
+    position: relative;
 }
 
-.mChat-Home .chats > div{
+.mChat-Home .chats .allChats > div{
     padding: 10px;
     cursor: pointer;
     border-bottom: 2px solid lightgrey;
 }
 
-.mChat-Home .chats > div > div{
+.mChat-Home .chats > div > div > div{
     height: 35px;
     overflow: hidden;
 }
 
-.mChat-Home .chats > div:hover{
+.mChat-Home .chats .allChats > div:hover{
     background-color: rgb(211, 209, 209);
 }
 
@@ -33,13 +35,25 @@
     /* background-color: red; */
     background: #26283e5e;
     width: 100%;
-    overflow-y: auto;
+    height: inherit;
 }
 
 .mChat-Home .chat .messages{
     max-width: 100%;
     background-color: transparent;
     height: calc(100% - 60px);
+}
+
+.mChat-Home .chat .messages h3{
+    position: sticky;
+    top: 0px;
+    left: 50%;
+    width: fit-content;
+    transform: translateX(-50%);
+    background: #908c90ed;
+    padding: 0px 5px;
+    border-radius: 0px 0px 15px 15px;
+    font-weight: 400;
 }
 
 .mChat-Home .chat .messages .sent{
@@ -56,12 +70,60 @@
     padding: 10px;
 }
 
-.mChat-send input {
+.mChat-send input, input {
     padding: 5px 10px;
     outline: none;
     border-radius: 5px;
     border: 0px solid black;
     width: 100%;
+}
+
+.search{
+    position: relative;
+    height: calc(100vh - 80px);
+    position: absolute;
+    width: 100%;
+    background: #00000057;
+    top: 0px;
+}
+
+.search > div:first-child{
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.search input{
+    width: 200px;
+}
+
+.search img{
+    cursor: pointer;
+    height: 35px;
+    width: 40px;
+}
+
+.results{
+    background: white;
+    position: relative;
+    left: 10px;
+    width: 200px;
+    border-radius: 0px 0px 10px 10px;
+    padding: 5px 10px;
+    height: 80%;
+    top: -5px;
+    font-size: 17px;
+}
+
+.results > div{
+    display: flex;
+    justify-content: space-between;
+    height: fit-content!important;
+}
+
+.results > div > div:nth-child(2)
+{
+    cursor: pointer;
 }
 
 /* .submit {

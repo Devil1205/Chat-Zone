@@ -32,26 +32,23 @@ function Navbar({ verifyUser, message, updateMessage }) {
                 {message && <div className={`alert alert-${message.type==='success'?message.type:"danger"}`} role='alert'>{`${message.type} : ${message.message}`}</div>}
             </div>
             <div className="container-fluid">
-                <Link className="navbar-brand" to="/">Quotify</Link>
+                <Link className="navbar-brand" to="/mChat">mChat</Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <Link className={`nav-link ${location.pathname === '/' ? 'active' : ""}`} aria-current="page" to="/">Home</Link>
+                            <Link className={`nav-link ${location.pathname === '/mChat/home' ? 'active' : ""}`} aria-current="page" to="/">Home</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className={`nav-link ${location.pathname === '/quotes' ? 'active' : ""}`} to="quotes">All Quotes</Link>
+                            <Link className={`nav-link ${location.pathname === '/quotes' ? 'active' : ""}`} to="quotes">Groups</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className={`nav-link ${location.pathname === '/my_quotes' ? 'active' : ""}`} to="my_quotes">My Quotes</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className={`nav-link ${location.pathname === '/new_quote' ? 'active' : ""}`} to="new_quote">Write a Quote</Link>
+                            <Link className={`nav-link ${location.pathname === '/my_quotes' ? 'active' : ""}`} to="my_quotes">About</Link>
                         </li>
                         <div className='profile me-4'>
-                            {user === false ? <AccountCircleIcon fontSize='large' color='primary' onClick={() => { navigate('/user') }} /> :
+                            {user === false ? <AccountCircleIcon fontSize='large' color='primary' onClick={() => { navigate('/mChat/user') }} /> :
                                 <li className="nav-item dropdown">
                                     <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Profile
