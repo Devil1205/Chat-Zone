@@ -12,8 +12,8 @@ import ForgotPassword from './components/mChat/SignupSignin/ForgotPassword';
 
 function App() {
   
-  const base_URL = "http://localhost:5000";
-  // const base_URL = "https://chat-zone-qu4q.onrender.com";
+  // const base_URL = "http://localhost:5000";
+  const base_URL = "https://chat-zone-qu4q.onrender.com/";
 
   const [message, setMessage] = useState("");
   const [showNavbar, setShowNavbar] = useState(true);
@@ -51,6 +51,7 @@ function App() {
         <Route exact path ="/chat-zone/" element={<ChatZoneHome base_URL={base_URL} setShowNavbar={setShowNavbar} / >} />
         <Route exact path ="/chat-zone/user" element={<ChatZoneUser setShowNavbar={setShowNavbar} />} />
         <Route exact path="/mChat/" element={<MChatHome setShowNavbar={setShowNavbar} base_URL={base_URL}/>} />
+        <Route exact path="/mChat/home" element={<MChatHome setShowNavbar={setShowNavbar} base_URL={base_URL}/>} />
         <Route exact path="/mChat/user" element={<MChatUser base_URL={base_URL} setShowNavbar={setShowNavbar} message={message} updateMessage={updateMessage}/>} />
         <Route exact path="/mChat/forgotPassword" element={<ForgotPassword base_URL={base_URL} setShowNavbar={setShowNavbar} message={message} updateMessage={updateMessage}/>} />
         <Route exact path="/mChat/setPassword/:token" element={<SetPassword base_URL={base_URL} setShowNavbar={setShowNavbar} message={message} updateMessage={updateMessage}/>} />

@@ -3,14 +3,16 @@ const express = require('express');
 const router = express.Router();
 
 const user = {};
-io.of('chat-zone').on('connection', socket =>{
+io.of('/chat-zone').on('connection', socket =>{
     socket.on('new-user-joined', name=>{
         user[socket.id]=name;
+        // console.log(socket.id);
         socket.broadcast.emit('user-joined',{name,message: "joined"});
         socket.emit('user-joined',{name: "You", message: "joined"});
     })
     
     socket.on('sendMessage',message=>{
+        // console.log(socket.id);
         socket.broadcast.emit('receivedMessage',{name: user[socket.id], message});
         socket.emit('sentMessage',{name: "You", message});
     })

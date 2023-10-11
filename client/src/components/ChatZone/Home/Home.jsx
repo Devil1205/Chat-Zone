@@ -1,28 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import './Home.css';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import socketIO from 'socket.io-client';
 
 function Home({ setShowNavbar, base_URL }) {
     
-    let socket;
+    const [socket, setSocket] = useState(null);
+
+    const socketEvents = async (connect) => {
+
+        connect.emit("new-user-joined", name);
+        
+        connect.on('user-joined', ({ name, message }) => {
+            joinMessage(name, message);
+        })
+
+        connect.on('receivedMessage', ({ name, message }) => {
+            appendMessage(name, message, "received");
+        })
+        connect.on('sentMessage', ({ name, message }) => {
+            appendMessage(name, message, "sent");
+        })
+
+        connect.on('user-left', ({ name, message }) => {
+            joinMessage(name, message);
+        })
+    }
+
     const navigate = useNavigate();
     const [users, setUsers] = useState([]);
     const name = localStorage.getItem('name');
-    
+
     const appendMessage = (name, message, state) => {
         const messages = document.querySelector('.messages');
         const newMessage = `<div class=${state}><span>${name} : </span> ${message}</div>`;
         messages.innerHTML += newMessage;
     }
-    
+
     const joinMessage = async (name, message) => {
         const messages = document.querySelector('.messages');
         try {
             // const response = await fetch("https://chat-zone-qu4q.onrender.com/ChatZoneAPI/online-users");
-            const response = await fetch("http://localhost:5000/ChatZoneAPI/online-users");
+            const response = await fetch(base_URL+"/ChatZoneAPI/online-users");
             const responsJson = await response.json();
             setUsers(responsJson.users);
         }
@@ -50,37 +71,23 @@ function Home({ setShowNavbar, base_URL }) {
     useEffect(() => {
 
         setShowNavbar(false);
-        socket = socketIO.connect(base_URL+"/chat-zone",{ transports: ['websocket']});
 
+        const connect = socketIO.connect(base_URL + "/chat-zone", { transports: ['websocket'] });
+        setSocket(connect);
 
         if (name === null)
             navigate('/chat-zone/user');
         else {
-            socket.emit("new-user-joined", name);
-            
-            socket.on('user-joined', ({ name, message }) => {
-                joinMessage(name, message);
-            })
-
-            socket.on('receivedMessage', ({ name, message }) => {
-                appendMessage(name, message, "received");
-            })
-            socket.on('sentMessage', ({ name, message }) => {
-                appendMessage(name, message, "sent");
-            })
-
-            socket.on('user-left', ({ name, message }) => {
-                joinMessage(name, message);
-            })
+            socketEvents(connect);
         }
         localStorage.clear();
         return () => {
             setShowNavbar(true);
         }
-    }, [socket])
+    }, [])
 
-
-
+    
+    
     const sendMessage = (e) => {
         e.preventDefault();
         const message = document.getElementById('sendMessage');

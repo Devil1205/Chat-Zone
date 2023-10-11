@@ -12,7 +12,7 @@ function Home({ setShowNavbar, base_URL }) {
     const [allChat, setAllChat] = useState([]);
     const [currChat, setCurrChat] = useState({ messages: [] });
     const [receiverList, setReceiverList] = useState({});
-    const BackendURL = "http://localhost:5000";
+    // const base_URL = "http://localhost:5000";
     const authToken = localStorage.getItem('auth-token');
     const clickOutside = useRef(null);
     const navigate = useNavigate();
@@ -32,7 +32,7 @@ function Home({ setShowNavbar, base_URL }) {
             const content = formElement.target.sendMessage.value;
             const type = "sent";
             const body = JSON.stringify({ receiver, content, type });
-            const response = await axios.post(BackendURL + "/mChatMessageAPI/send",
+            const response = await axios.post(base_URL + "/mChatMessageAPI/send",
                 body,
                 {
                     headers: {
@@ -60,7 +60,7 @@ function Home({ setShowNavbar, base_URL }) {
         try {
             // console.log(receiver);
             const body = JSON.stringify({ receiver: receiver });
-            const response = await axios.post(BackendURL + "/mChatMessageAPI/userDetails",
+            const response = await axios.post(base_URL + "/mChatMessageAPI/userDetails",
                 body,
                 {
                     headers: {
@@ -78,7 +78,7 @@ function Home({ setShowNavbar, base_URL }) {
     const getSenderDetails = async () => {
         try {
             // console.log(receiver);
-            const response = await axios.get(BackendURL + "/mChatMessageAPI/sender",
+            const response = await axios.get(base_URL + "/mChatMessageAPI/sender",
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -96,7 +96,7 @@ function Home({ setShowNavbar, base_URL }) {
     const getCurrentChat = async (receiver) => {
         try {
             const body = JSON.stringify({ receiver: receiver });
-            const response = await axios.post(BackendURL + "/mChatMessageAPI/messages",
+            const response = await axios.post(base_URL + "/mChatMessageAPI/messages",
                 body,
                 {
                     headers: {
@@ -137,7 +137,7 @@ function Home({ setShowNavbar, base_URL }) {
 
     const getAllChats = async () => {
         try {
-            const response = await axios.get(BackendURL + "/mChatMessageAPI/allMessages",
+            const response = await axios.get(base_URL + "/mChatMessageAPI/allMessages",
                 { headers: { "Content-Type": "application/json", "auth-token": authToken } });
             // console.log(response);
 
@@ -157,7 +157,7 @@ function Home({ setShowNavbar, base_URL }) {
         try {
             const phone = document.getElementById('search');
             const body = JSON.stringify({ phone: phone.value });
-            const response = await axios.post(BackendURL + "/mChatMessageAPI/getReceiver",
+            const response = await axios.post(base_URL + "/mChatMessageAPI/getReceiver",
                 body,
                 {
                     headers: {
