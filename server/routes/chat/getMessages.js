@@ -19,7 +19,7 @@ router.post('/messages', fetchUser, [
     //checking if sender exists in db
     const senderExists = await Message.findOne({ 'user.id': req.user.id });
     if (!senderExists) {
-        return res.status(404).json({ error: "This chat doesn't exist" });
+        return res.status(404).json({ error: "Unauthorized access" });
     }
 
 
@@ -36,7 +36,8 @@ router.post('/messages', fetchUser, [
     //cehcking if receiver exists
     if (!receiverExists) {
         // console.log(updatedReceiver);   
-        return res.status(404).json({ error: "This chat doesn't exist" });
+        const temp={messages: [], receiver};
+        return res.json(temp);
     }
 
 

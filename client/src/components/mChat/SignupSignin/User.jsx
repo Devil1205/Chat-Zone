@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link , useNavigate } from 'react-router-dom';
 import './Main.css'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 function User({ base_URL, setShowNavbar, showNavbar, message, updateMessage }) {
     const navigate = useNavigate();
-    const location = useLocation();
-    let loginText;
-    let loginForm;
+    const [loginText, setLoginText] = useState();
+    const [loginForm, setLoginForm] = useState();
     //form display and navbar hide front end code
     useEffect(() => {
         setShowNavbar(false);
-        loginText = document.querySelector(".title-text .login");
-        loginForm = document.querySelector("form.login");
+        setLoginText(document.querySelector(".title-text .login"));
+        setLoginForm(document.querySelector("form.login"));
         return () => {
             setShowNavbar(true);
         }
@@ -30,22 +29,22 @@ function User({ base_URL, setShowNavbar, showNavbar, message, updateMessage }) {
         };
         try {
             navigate('/mChat');
-            // const response = await fetch(base_URL + '/mChatAuthAPI/login',
-            //     {
-            //         method: "POST",
-            //         body: JSON.stringify(data),
-            //         headers: { "content-type": "application/json" }
-            //     })
-            // //Navigate user to his account if credentials are correct
-            // const responseJson = await response.json();
-            // // console.log(responseJson);
-            // if (response.status === 200) {
-            //     localStorage.setItem('auth-token', JSON.stringify({ user: responseJson.user.name, token: responseJson.authToken }));
-            //     navigate('/mChat');
-            // }
-            // else {
-            //     updateMessage("error", responseJson.error);
-            // }
+            const response = await fetch(base_URL + '/mChatAuthAPI/login',
+                {
+                    method: "POST",
+                    body: JSON.stringify(data),
+                    headers: { "content-type": "application/json" }
+                })
+            //Navigate user to his account if credentials are correct
+            const responseJson = await response.json();
+            // console.log(responseJson);
+            if (response.status === 200) {
+                localStorage.setItem('auth-token', responseJson.authToken);
+                navigate('/mChat');
+            }
+            else {
+                updateMessage("error", responseJson.error);
+            }
             // console.log(responseJson);
         }
         catch (error) {

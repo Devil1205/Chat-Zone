@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './Home.css';
 import SendIcon from '@mui/icons-material/Send';
 import axios from 'axios';
 import socketIO from 'socket.io-client';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from 'react-router-dom';
 
 function Home({ setShowNavbar, base_URL }) {
 
     const socket = socketIO.connect(base_URL + "/mChat", { transports: ['websocket'] });;
     const [allChat, setAllChat] = useState([]);
     const [currChat, setCurrChat] = useState({ messages: [] });
-    const [receiverList, setReceiverList] = useState([]);
+    const [receiverList, setReceiverList] = useState({});
     const BackendURL = "http://localhost:5000";
     const authToken = localStorage.getItem('auth-token');
+    const clickOutside = useRef(null);
+    const navigate = useNavigate();
 
     socket.on('received', async (message) => {
         // console.log(message);
@@ -110,6 +114,13 @@ function Home({ setShowNavbar, base_URL }) {
             // console.log(response.data);
             setCurrChat(response.data);
             socket.emit('user-chat', { sender: sender.id, receiver });
+            if (media.matches) {
+                const chat = document.getElementsByClassName('chat')[0];
+                const chats = document.getElementsByClassName('chats')[0];
+                chat.style.display = "block";
+                chats.style.display = "none";
+            }
+
         } catch (error) {
             console.log(error);
         }
@@ -142,28 +153,87 @@ function Home({ setShowNavbar, base_URL }) {
         }
     }
 
+    const getReceiverList = async () => {
+        try {
+            const phone = document.getElementById('search');
+            const body = JSON.stringify({ phone: phone.value });
+            const response = await axios.post(BackendURL + "/mChatMessageAPI/getReceiver",
+                body,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "auth-token": authToken
+                    }
+                }
+            )
+            // console.log(response.data);
+            setReceiverList(response.data);
+        }
+        catch (err) {
+            setReceiverList({});
+            console.log(err);
+        }
+        finally {
+            const search = document.getElementsByClassName('search')[0];
+            search.style.display = "block";
+        }
+    }
+
+    //close search results when clicked outside
+    const handleClick = (e) => {
+        const search = document.getElementsByClassName('search')[0];
+        if (!clickOutside.current.contains(e.target))
+            search.style.display = "none";
+        // console.log(clickOutside.current.contains(e.target));
+    }
+
+    const media = window.matchMedia('(max-width: 580px)');
+    console.log(media);
+
+    const goToAllChatMobile = () => {
+        if (media.matches) {
+            const chat = document.getElementsByClassName('chat')[0];
+            const chats = document.getElementsByClassName('chats')[0];
+            chat.style.display = "none";
+            chats.style.display = "block";
+        }
+        setCurrChat({ messages: [] });
+    }
+
     useEffect(() => {
         setShowNavbar(true);
+        if(!authToken)
+            navigate('/mChat/user')
         getSenderDetails();
         getAllChats();
         // socket.on('sendMessage', "Pulkit");
         socket.emit("user-online", "hey");
+        const search = document.getElementsByClassName('search')[0];
+        search.addEventListener('click', handleClick);
+        return () => {
+            search.removeEventListener('click', handleClick);
+        }
 
-        // getUserDetails("651fe6bd3d95d3b297ed7809");
     }, [])
 
     return (
         <div className='mChat-Home'>
             <div className="chats">
+                <div className='searchBar'>
+                    <input type="text" id='search' placeholder='search' />
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Search_Icon.svg" alt="" height={20} width={20} onClick={() => { getReceiverList() }} />
+                </div>
                 <div className="search">
-                    <div>
-                        <input type="text" placeholder='search' />
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Search_Icon.svg" alt="" height={20} width={20} onClick={""}/>
-                    </div>
-                    <div className="results">
+                    <div className="results" ref={clickOutside}>
                         <div>
-                            <div>8470950994</div>
-                            <div>Chat</div>
+                            {receiverList.phone ? <>
+                                <div>{receiverList.phone}</div>
+                                <div onClick={() => { getCurrentChat(receiverList.id) }}>Chat</div>
+                            </>
+                                : <>
+                                    <div>Number not registered</div>
+                                </>
+                            }
                         </div>
                     </div>
                 </div>
@@ -190,29 +260,39 @@ function Home({ setShowNavbar, base_URL }) {
                 </div>
             </div>
             <div className="chat">
-                <div className='messages'>
-                    {/* <h3 className='text-center'>Pulkit</h3>
+                {
+                    currChat.messages.length>0 ? <>
+                        <div className='messages'>
+                            {/* <h3 className='text-center'>Pulkit</h3>
                     <div className="sent">
                         Hello
                     </div>
                     <div className="received">
                         HEY
                     </div> */}
-                    <h3 className="text-center">{currChat && currChat.name}</h3>
-                    {/* {console.log(currChat)} */}
-                    {
-                        currChat && currChat.messages.map((elem, ind) => {
-                            if (ind === currChat.messages.length - 1) { scrollToBottom() }
-                            return (
-                                <div key={ind} className={elem.type}>{elem.content}</div>
-                            )
-                        })
-                    }
-                </div>
-                <form className="mChat-send" onSubmit={(e) => { sendMessage(e, currChat.receiver) }}>
-                    <input id="sendMessage" type="text" placeholder='chat' name='sendMessage' />
-                    <button className="btn btn-primary submit" type="submit" ><SendIcon fontSize='medium' /></button>
-                </form>
+                            <div className="backButton" onClick={goToAllChatMobile}>
+                                <ArrowBackIcon fontSize='large' sx={{ color: "white" }} />
+                            </div>
+                            <h3 className="text-center">{currChat.name}</h3>
+                            {
+                                currChat.messages.map((elem, ind) => {
+                                    if (ind === currChat.messages.length - 1) { scrollToBottom() }
+                                    return (
+                                        <div key={ind} className={elem.type}>{elem.content}</div>
+                                    )
+                                })
+                            }
+                        </div>
+                        <form className="mChat-send" onSubmit={(e) => { sendMessage(e, currChat.receiver) }}>
+                            <input id="sendMessage" type="text" placeholder='chat' name='sendMessage' />
+                            <button className="btn btn-primary submit" type="submit" ><SendIcon fontSize='medium' /></button>
+                        </form>
+                    </> :
+                        <>
+                            <h3 className='text-center'>Welcome to mChat</h3>
+                            <h5 className='text-center'>A quick way to connect</h5>
+                        </>
+                }
             </div>
         </div>
     )

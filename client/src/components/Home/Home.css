@@ -1,5 +1,5 @@
 .myHome{
-    height: calc(100vh - 80px);
+    height: 100vh;
     display: flex;
     justify-content: center;
     background: lightblue;
@@ -7,6 +7,8 @@
 }
 
 .myHome > div{
-    margin: 0px 10px;
+    margin: 0px 30px;
     height: fit-content;
+    padding: 15px;
+    font-size: 25px;
 }

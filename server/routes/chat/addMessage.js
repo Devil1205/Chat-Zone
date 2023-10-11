@@ -71,7 +71,7 @@ router.post('/send', fetchUser, [
 
     const userSnder = await User.findById(req.user.id);
     if(!userSnder)
-        return res.status(404).json({messgae: "User doesn't exist"});
+        return res.status(404).json({messgae: "Unauthorized access"});
     const userReceiver = await User.findById(receiver);
     if(!userReceiver)
         return res.status(404).json({messgae: "User doesn't exist"});
@@ -79,7 +79,9 @@ router.post('/send', fetchUser, [
     //calling api for sender message
     const newMessage = await saveMessage(req.user.id,receiver,content,type);
     // console.log(newMessage)
-    await saveMessage(receiver,req.user.id,content,"received");
+    //if user is sending to self then not receive
+    if(req.user.id!==receiver)
+        await saveMessage(receiver,req.user.id,content,"received");
     return res.status(200).json(newMessage);
 })
 
