@@ -13,7 +13,7 @@ import ForgotPassword from './components/mChat/SignupSignin/ForgotPassword';
 function App() {
   
   // const base_URL = "http://localhost:5000";
-  const base_URL = "https://chat-zone-qu4q.onrender.com/";
+  const base_URL = "https://chat-zone-qu4q.onrender.com";
 
   const [message, setMessage] = useState("");
   const [showNavbar, setShowNavbar] = useState(true);
