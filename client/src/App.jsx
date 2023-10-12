@@ -2,7 +2,7 @@ import './App.css';
 import Home from './components/Home/Home';
 import ChatZoneUser from './components/ChatZone/SignupSignin/User';
 import ChatZoneHome from './components/ChatZone/Home/Home';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import { useState } from 'react';
 import MChatUser from './components/mChat/SignupSignin/User';
 import MChatHome from './components/mChat/Home/Home';
