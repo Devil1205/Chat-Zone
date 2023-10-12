@@ -10,7 +10,7 @@ function Home({ setShowNavbar, base_URL }) {
 
     const socket = socketIO.connect(base_URL + "/mChat", { transports: ['websocket'] });;
     const [allChat, setAllChat] = useState([]);
-    const [currChat, setCurrChat] = useState({ messages: [] });
+    const [currChat, setCurrChat] = useState({ messages: null });
     const [receiverList, setReceiverList] = useState({});
     // const base_URL = "http://localhost:5000";
     const authToken = localStorage.getItem('auth-token');
@@ -188,7 +188,7 @@ function Home({ setShowNavbar, base_URL }) {
     }
 
     const media = window.matchMedia('(max-width: 580px)');
-    console.log(media);
+    // console.log(media);
 
     const goToAllChatMobile = () => {
         if (media.matches) {
@@ -197,7 +197,7 @@ function Home({ setShowNavbar, base_URL }) {
             chat.style.display = "none";
             chats.style.display = "block";
         }
-        setCurrChat({ messages: [] });
+        setCurrChat({ messages: null });
     }
 
     useEffect(() => {
@@ -261,7 +261,7 @@ function Home({ setShowNavbar, base_URL }) {
             </div>
             <div className="chat">
                 {
-                    currChat.messages.length>0 ? <>
+                    currChat.messages ? <>
                         <div className='messages'>
                             {/* <h3 className='text-center'>Pulkit</h3>
                     <div className="sent">

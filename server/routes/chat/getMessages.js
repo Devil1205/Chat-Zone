@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Message = require('../../models/messageSchema');
+const User = require('../../models/userSchema');
 const { body, validationResult } = require('express-validator');
 const fetchUser = require('../../middleware/fetchUser');
 
@@ -17,9 +18,16 @@ router.post('/messages', fetchUser, [
     const { receiver } = req.body;
 
     //checking if sender exists in db
-    const senderExists = await Message.findOne({ 'user.id': req.user.id });
-    if (!senderExists) {
+    const userExists = await User.findById( req.user.id );
+    if (!userExists) {
         return res.status(404).json({ error: "Unauthorized access" });
+    }
+
+    const senderExists = await Message.findOne( {'user.id':req.user.id} );
+    if (!senderExists) {
+        const temp={messages: [], receiver};
+        return res.json(temp);
+        // return res.status(404).json({ error: "Unauthorized access" });
     }
 
 
