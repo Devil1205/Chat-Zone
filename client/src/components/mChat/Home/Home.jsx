@@ -6,16 +6,24 @@ import socketIO from 'socket.io-client';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 
-function Home({ setShowNavbar, base_URL }) {
+function Home({ setShowNavbar, base_URL, verifyUser, message, updateMessage }) {
 
     const socket = socketIO.connect(base_URL + "/mChat", { transports: ['websocket'] });;
     const [allChat, setAllChat] = useState([]);
     const [currChat, setCurrChat] = useState({ messages: null });
+    const [user, setUser] = useState({});
     const [receiverList, setReceiverList] = useState({});
     // const base_URL = "http://localhost:5000";
     const authToken = localStorage.getItem('auth-token');
     const clickOutside = useRef(null);
     const navigate = useNavigate();
+
+    const logoutUser = () => {
+        localStorage.removeItem('auth-token');
+        setUser(false);
+        updateMessage("success", "Logged out successfully");
+        navigate('/mChat/user');
+    }
 
     socket.on('received', async (message) => {
         // console.log(message);
@@ -33,9 +41,9 @@ function Home({ setShowNavbar, base_URL }) {
             const type = "sent";
             const body = JSON.stringify({ receiver, content, type });
             const response = await axios.post(base_URL + "/mChatMessageAPI/send",
-                body,
-                {
-                    headers: {
+            body,
+            {
+                headers: {
                         "Content-Type": "application/json",
                         "auth-token": authToken
                     }
@@ -51,6 +59,7 @@ function Home({ setShowNavbar, base_URL }) {
             // console.log(response.data);
             getAllChats();
             socket.emit('sent', { sender: sender.id, receiver });
+            formElement.target.reset();
         } catch (error) {
             console.log(error);
         }
@@ -187,7 +196,7 @@ function Home({ setShowNavbar, base_URL }) {
         // console.log(clickOutside.current.contains(e.target));
     }
 
-    const media = window.matchMedia('(max-width: 580px)');
+    const media = window.matchMedia('(max-width: 658px)');
     // console.log(media);
 
     const goToAllChatMobile = () => {
@@ -200,15 +209,22 @@ function Home({ setShowNavbar, base_URL }) {
         setCurrChat({ messages: null });
     }
 
+    const verify = async () => {
+        const result = await verifyUser();
+        // console.log(result);
+        setUser(result);
+    }
+
     useEffect(() => {
         setShowNavbar(true);
-        if(!authToken)
+        if (!authToken)
             navigate('/mChat/user')
         getSenderDetails();
         getAllChats();
         // socket.on('sendMessage', "Pulkit");
         socket.emit("user-online", "hey");
         const search = document.getElementsByClassName('search')[0];
+        verify();
         search.addEventListener('click', handleClick);
         return () => {
             search.removeEventListener('click', handleClick);
@@ -218,10 +234,26 @@ function Home({ setShowNavbar, base_URL }) {
 
     return (
         <div className='mChat-Home'>
+            <div className='message'>
+                {message && <div className={`alert alert-${message.type === 'success' ? message.type : "danger"}`} role='alert'>{`${message.type} : ${message.message}`}</div>}
+            </div>
             <div className="chats">
-                <div className='searchBar'>
-                    <input type="text" id='search' placeholder='search' />
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Search_Icon.svg" alt="" height={20} width={20} onClick={() => { getReceiverList() }} />
+                <div className='homeMenu'>
+                    <div className='searchBar'>
+                        <input type="text" id='search' placeholder='search' />
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Search_Icon.svg" alt="" height={20} width={20} onClick={() => { getReceiverList() }} />
+                    </div>
+                    <div className="dropdown">
+                        <svg className='bi bi-three-dots-vertical dropdown-toggle' data-bs-auto-close="outside" type="button" data-bs-toggle="dropdown" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                        </svg>
+                        <ul className="dropdown-menu" style={{maxWidth: "250px", overflow: "auto"}}>
+                            <li><div className="dropdown-item">{user.name}</div></li>
+                            <li><div className="dropdown-item">{user.email}</div></li>
+                            <li><div className="dropdown-item">{user.phone}</div></li>
+                            <li><button className="dropdown-item" onClick={logoutUser}>Logout</button></li>
+                        </ul>
+                    </div>
                 </div>
                 <div className="search">
                     <div className="results" ref={clickOutside}>

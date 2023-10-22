@@ -1,12 +1,12 @@
 .mChat-Home{
     background-color: white;
     display: flex;
-    height: calc(100vh - 80px);
+    height: 100vh;
     overflow: hidden;
 }
 
 .mChat-Home .chats{
-    background: #ede7ff;
+    background-color: #0c0523;
     max-width: 500px;
     width: 50%;
     /* border-radius: 5px; */
@@ -15,6 +15,8 @@
     height: inherit;
     overflow-y: auto;
     position: relative;
+    color: white;
+    box-shadow: -1px 0px 17px 2px black;
 }
 
 .mChat-Home .chats .allChats > div{
@@ -29,14 +31,15 @@
 }
 
 .mChat-Home .chats .allChats > div:hover{
-    background-color: rgb(211, 209, 209);
+    background-color: rgba(255, 255, 255, 0.16);
 }
 
 .mChat-Home .chat{
     /* background-color: red; */
-    background: #26283e5e;
+    background: #040621;
     width: 100%;
     height: inherit;
+    color: white;
 }
 
 .mChat-Home .chat .messages{
@@ -51,7 +54,7 @@
     left: 50%;
     width: fit-content;
     transform: translateX(-35%);
-    background: #908c90ed;
+    /* background: #908c90ed; */
     padding: 0px 5px;
     border-radius: 0px 0px 15px 15px;
     font-weight: 400;
@@ -77,11 +80,13 @@
     border-radius: 5px;
     border: 0px solid black;
     width: 100%;
+    background-color: #aeb0bd24;
+    color: white;
 }
 
 .search{
     position: relative;
-    height: calc(100vh - 150px);
+    height: calc(100vh - 70px);
     position: absolute;
     width: 100%;
     background: #00000057;
@@ -92,8 +97,16 @@
 .searchBar{
     display: flex;
     align-items: center;
-    padding: 10px;
     width: fit-content;
+    margin-right: 5px;
+}
+
+.homeMenu{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
 }
 
 .searchBar input{
@@ -104,6 +117,7 @@
     cursor: pointer;
     height: 35px;
     width: 40px;
+    filter: invert(1);
 }
 
 .results{
@@ -122,6 +136,7 @@
     display: flex;
     justify-content: space-between;
     height: fit-content!important;
+    color: black;
 }
 
 .results > div > div:nth-child(2)
@@ -135,7 +150,14 @@
     left: 34%;
 }
 
-@media screen and (max-width: 580px) {
+.message{
+    position: fixed;
+    top: 80px;
+    width: 100%;
+    /* font-size: 20px; */
+}
+
+@media screen and (max-width: 658px) {
     .mChat-Home .chat{
         display: none;
     }
