@@ -1,11 +1,11 @@
-.mChat-Home{
+.mChat-Home {
     background-color: white;
     display: flex;
     height: 100vh;
     overflow: hidden;
 }
 
-.mChat-Home .chats{
+.mChat-Home .chats {
     background-color: #0c0523;
     max-width: 500px;
     width: 50%;
@@ -19,22 +19,22 @@
     box-shadow: -1px 0px 17px 2px black;
 }
 
-.mChat-Home .chats .allChats > div{
+.mChat-Home .chats .allChats>div {
     padding: 10px;
     cursor: pointer;
     border-bottom: 2px solid lightgrey;
 }
 
-.mChat-Home .chats > div > div > div{
+.mChat-Home .allChats>div>div {
     height: 35px;
     overflow: hidden;
 }
 
-.mChat-Home .chats .allChats > div:hover{
+.mChat-Home .chats .allChats>div:hover {
     background-color: rgba(255, 255, 255, 0.16);
 }
 
-.mChat-Home .chat{
+.mChat-Home .chat {
     /* background-color: red; */
     background: #040621;
     width: 100%;
@@ -42,29 +42,37 @@
     color: white;
 }
 
-.mChat-Home .chat .messages{
+.mChat-Home .chat .messages {
     max-width: 100%;
     background-color: transparent;
     height: calc(100% - 60px);
 }
 
-.mChat-Home .chat .messages h3{
+.mChat-Home .chat .messages .nameHeading {
     position: sticky;
     top: 0px;
-    left: 50%;
-    width: fit-content;
-    transform: translateX(-35%);
+    /* left: 50%; */
+    width: 100%;
+    /* transform: translateX(-50%); */
     /* background: #908c90ed; */
-    padding: 0px 5px;
+    /* padding: 0px 5px; */
     border-radius: 0px 0px 15px 15px;
     font-weight: 400;
+    display: flex;
+    /* flex-direction: row; */
+    align-items: center;
 }
 
-.mChat-Home .chat .messages .sent{
+.mChat-Home .chat .messages .nameHeading h3 {
+    font-weight: 400;
+    margin: auto;
+}
+
+.mChat-Home .chat .messages .sent {
     background-color: #3c7a3c;
 }
 
-.mChat-Home .chat .messages .received{
+.mChat-Home .chat .messages .received {
     background-color: #6659ad;
 }
 
@@ -74,7 +82,8 @@
     padding: 10px;
 }
 
-.mChat-send input, input {
+.mChat-send input,
+input {
     padding: 5px 10px;
     outline: none;
     border-radius: 5px;
@@ -84,24 +93,25 @@
     color: white;
 }
 
-.search{
-    position: relative;
-    height: calc(100vh - 70px);
+.search {
     position: absolute;
-    width: 100%;
+    height: calc(100vh - 70px);
+    width: inherit;
     background: #00000057;
-    top: 70px;
+    top: 63px;
     display: none;
+    left: 0px;
+    padding: 0px 40px 0px 10px;
 }
 
-.searchBar{
+.searchBar {
     display: flex;
     align-items: center;
-    width: fit-content;
-    margin-right: 5px;
+    width: 100%;
+    /* margin-right: 5px; */
 }
 
-.homeMenu{
+.homeMenu {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -109,48 +119,43 @@
     padding: 10px;
 }
 
-.searchBar input{
+.searchBar input {
     min-width: 128px;
 }
 
-.searchBar img{
+.searchBar img {
     cursor: pointer;
     height: 35px;
     width: 40px;
     filter: invert(1);
 }
 
-.results{
+.results {
     background: white;
-    position: relative;
     left: 10px;
-    width: 200px;
+    width: inherit;
     border-radius: 0px 0px 10px 10px;
     padding: 5px 10px;
-    /* height: 80%; */
-    top: -5px;
     font-size: 17px;
 }
 
-.results > div{
+.results>div {
     display: flex;
     justify-content: space-between;
-    height: fit-content!important;
+    height: fit-content !important;
     color: black;
 }
 
-.results > div > div:nth-child(2)
-{
+.results>div>div:nth-child(2) {
     cursor: pointer;
 }
 
-.mChat-Home .chat .messages .backButton{
-    position: fixed;
-    top: 80px;
-    left: 34%;
+.mChat-Home .chat .messages .backButton {
+    position: static;
+    margin: 5px 0px 0px 5px;
 }
 
-.message{
+.message {
     position: fixed;
     top: 80px;
     width: 100%;
@@ -158,22 +163,22 @@
 }
 
 @media screen and (max-width: 658px) {
-    .mChat-Home .chat{
+    .mChat-Home .chat {
         display: none;
     }
-    
-    .mChat-Home .chats{
+
+    .mChat-Home .chats {
         max-width: 100%;
         width: 100%;
     }
 
-    .mChat-Home .chat .messages .backButton{
+    .mChat-Home .chat .messages .backButton {
         left: 10px;
+    }
 }
-}
+
 /* .submit {
     width: fit-content !important;
     height: fit-content !important;
     border-radius: 5px!important;
 } */
-

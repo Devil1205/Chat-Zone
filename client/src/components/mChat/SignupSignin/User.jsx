@@ -91,7 +91,7 @@ function User({ base_URL, setShowNavbar, showNavbar, message, updateMessage }) {
 
     return (
         <div className="user">
-            <div className="backButton" onClick={() => { navigate(-1) }}><ArrowBackIcon fontSize='large' sx={{ color: "white" }} /></div>
+            <div className="backButton" onClick={() => { navigate("/") }}><ArrowBackIcon fontSize='large' sx={{ color: "white" }} /></div>
             <div className='loginMessage'>
                 {message && <div className={`alert alert-${message.type === 'success' ? message.type : "danger"}`} role='alert'>{`${message.type} : ${message.message}`}</div>}
             </div>

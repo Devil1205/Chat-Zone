@@ -32,7 +32,7 @@ router.post('/userDetails', fetchUser, [
 
 //get a receiver by phone search
 router.post('/getReceiver', fetchUser, [
-    body('phone', "Invalid phone number").isLength({ min: 10, max: 10 }),
+    body('search', "Invalid query").isLength({ min: 1 }),
 ], async (req, res) => {
     // console.log(req.body);
     const errors = validationResult(req);
@@ -40,24 +40,32 @@ router.post('/getReceiver', fetchUser, [
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { phone } = req.body;
+    const { search } = req.body;
+    let user;
 
     //checking if sender exists in db
-    const user = await User.findOne({phone});
+    try {
+        user = await User.find({ $or: [{ name: { $regex: search, $options: "i" } }, !isNaN(search) ? { phone: Number.parseInt(search) } : { phone: -1 }] }).select("-password");
+    }
+    catch (e) {
+        // console.log(e);
+        return res.status(404).json({ error: "This user doesn't exist" });
+    }
+    // console.log(Number.parseInt(search));
+    // console.log(user);
     if (!user) {
         return res.status(404).json({ error: "This user doesn't exist" });
     }
 
     // console.log(user);
-    const userDetails = { id: user._id, phone: user.phone, name: user.name };
-        return res.status(200).json(userDetails);
+    return res.status(200).json(user);
 })
 
 //get sender user details
 router.get('/sender', fetchUser,
     async (req, res) => {
         // console.log(req.body);
-        
+
         //checking if user exists in db
         const user = await User.findById(req.user.id);
         if (!user) {
@@ -66,7 +74,7 @@ router.get('/sender', fetchUser,
 
         // console.log(user);
         const userDetails = { id: req.user.id, name: user.name, phone: user.phone };
-        
+
         return res.status(200).json(userDetails);
 
     })

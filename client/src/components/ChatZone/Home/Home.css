@@ -35,9 +35,10 @@
     background: #622765;
     border: 2px solid black;
     border-radius: 5px;
-    max-width: 70%;
+    max-width: 85%;
     width: fit-content;
     padding: 5px 10px;
+    overflow-wrap: anywhere;
 }
 
 .sent span, .received span{

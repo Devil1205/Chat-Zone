@@ -12,7 +12,7 @@ function Home({ setShowNavbar, base_URL, verifyUser, message, updateMessage }) {
     const [allChat, setAllChat] = useState([]);
     const [currChat, setCurrChat] = useState({ messages: null });
     const [user, setUser] = useState({});
-    const [receiverList, setReceiverList] = useState({});
+    const [receiverList, setReceiverList] = useState([]);
     // const base_URL = "http://localhost:5000";
     const authToken = localStorage.getItem('auth-token');
     const clickOutside = useRef(null);
@@ -41,9 +41,9 @@ function Home({ setShowNavbar, base_URL, verifyUser, message, updateMessage }) {
             const type = "sent";
             const body = JSON.stringify({ receiver, content, type });
             const response = await axios.post(base_URL + "/mChatMessageAPI/send",
-            body,
-            {
-                headers: {
+                body,
+                {
+                    headers: {
                         "Content-Type": "application/json",
                         "auth-token": authToken
                     }
@@ -164,8 +164,8 @@ function Home({ setShowNavbar, base_URL, verifyUser, message, updateMessage }) {
 
     const getReceiverList = async () => {
         try {
-            const phone = document.getElementById('search');
-            const body = JSON.stringify({ phone: phone.value });
+            const search = document.getElementById('search');
+            const body = JSON.stringify({ search: search.value });
             const response = await axios.post(base_URL + "/mChatMessageAPI/getReceiver",
                 body,
                 {
@@ -179,7 +179,7 @@ function Home({ setShowNavbar, base_URL, verifyUser, message, updateMessage }) {
             setReceiverList(response.data);
         }
         catch (err) {
-            setReceiverList({});
+            setReceiverList([]);
             console.log(err);
         }
         finally {
@@ -240,32 +240,29 @@ function Home({ setShowNavbar, base_URL, verifyUser, message, updateMessage }) {
             <div className="chats">
                 <div className='homeMenu'>
                     <div className='searchBar'>
-                        <input type="text" id='search' placeholder='search' />
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Search_Icon.svg" alt="" height={20} width={20} onClick={() => { getReceiverList() }} />
+                        <input type="text" id='search' placeholder='search' onChange={getReceiverList} />
                     </div>
                     <div className="dropdown">
                         <svg className='bi bi-three-dots-vertical dropdown-toggle' data-bs-auto-close="outside" type="button" data-bs-toggle="dropdown" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 16 16">
                             <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
                         </svg>
-                        <ul className="dropdown-menu" style={{maxWidth: "250px", overflow: "auto"}}>
+                        <ul className="dropdown-menu" style={{ maxWidth: "250px", overflow: "auto" }}>
                             <li><div className="dropdown-item">{user.name}</div></li>
-                            <li><div className="dropdown-item">{user.email}</div></li>
+                            {/* <li><div className="dropdown-item">{user.email}</div></li> */}
                             <li><div className="dropdown-item">{user.phone}</div></li>
                             <li><button className="dropdown-item" onClick={logoutUser}>Logout</button></li>
                         </ul>
                     </div>
-                </div>
-                <div className="search">
-                    <div className="results" ref={clickOutside}>
-                        <div>
-                            {receiverList.phone ? <>
-                                <div>{receiverList.phone}</div>
-                                <div onClick={() => { getCurrentChat(receiverList.id) }}>Chat</div>
-                            </>
-                                : <>
-                                    <div>Number not registered</div>
-                                </>
-                            }
+                    <div className="search">
+                        <div className="results" ref={clickOutside}>
+                            {receiverList.length > 0 ? receiverList.map((receiver, index) => {
+                                return (
+                                    <div key={index}>
+                                        <div>{receiver.name}</div>
+                                        <div onClick={() => { getCurrentChat(receiver._id) }}>Chat</div>
+                                    </div>
+                                )
+                            }) : <div>Not found</div>}
                         </div>
                     </div>
                 </div>
@@ -283,7 +280,7 @@ function Home({ setShowNavbar, base_URL, verifyUser, message, updateMessage }) {
                             return (
                                 <div key={ind} onClick={() => { getCurrentChat(elem.receiver) }}>
                                     {/* {console.log(elem)} */}
-                                    <h4>{elem.phone}</h4>
+                                    <h4>{elem.name}</h4>
                                     <div>{elem.content}</div>
                                 </div>
                             )
@@ -302,10 +299,12 @@ function Home({ setShowNavbar, base_URL, verifyUser, message, updateMessage }) {
                     <div className="received">
                         HEY
                     </div> */}
-                            <div className="backButton" onClick={goToAllChatMobile}>
-                                <ArrowBackIcon fontSize='large' sx={{ color: "white" }} />
+                            <div className="nameHeading">
+                                <div className="backButton" onClick={goToAllChatMobile}>
+                                    <ArrowBackIcon fontSize='large' sx={{ color: "white" }} />
+                                </div>
+                                <h3 className="text-center">{currChat.name}</h3>
                             </div>
-                            <h3 className="text-center">{currChat.name}</h3>
                             {
                                 currChat.messages.map((elem, ind) => {
                                     if (ind === currChat.messages.length - 1) { scrollToBottom() }

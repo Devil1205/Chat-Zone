@@ -126,6 +126,7 @@ input[type="radio"] {
   padding-left: 15px;
   border-radius: 15px;
   border: 1px solid lightgrey;
+  color: black;
   border-bottom-width: 2px;
   font-size: 17px;
   transition: all 0.3s ease;
