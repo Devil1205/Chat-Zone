@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import './Home.css'
 import { useNavigate } from 'react-router-dom';
 
-function Home({setShowNavbar}) {
+function Home() {
 
     const navigate = useNavigate();
     const navigateTomChat = () => {
@@ -11,14 +11,6 @@ function Home({setShowNavbar}) {
     const navigateToChatZone = () => {
         navigate('/chat-zone/user');
     }
-
-    useEffect(() => {
-      setShowNavbar(false);
-      return ()=>{
-        setShowNavbar(true);
-      }
-    }, [])
-    
 
     return (
         <div className='myHome'>

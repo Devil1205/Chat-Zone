@@ -5,14 +5,14 @@ import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import socketIO from 'socket.io-client';
 
-function Home({ setShowNavbar, base_URL }) {
-    
+function Home({ base_URL }) {
+
     const [socket, setSocket] = useState(null);
 
     const socketEvents = async (connect) => {
 
         connect.emit("new-user-joined", name);
-        
+
         connect.on('user-joined', ({ name, message }) => {
             joinMessage(name, message);
         })
@@ -43,7 +43,7 @@ function Home({ setShowNavbar, base_URL }) {
         const messages = document.querySelector('.messages');
         try {
             // const response = await fetch("https://chat-zone-qu4q.onrender.com/ChatZoneAPI/online-users");
-            const response = await fetch(base_URL+"/ChatZoneAPI/online-users");
+            const response = await fetch(base_URL + "/ChatZoneAPI/online-users");
             const responsJson = await response.json();
             setUsers(responsJson.users);
         }
@@ -70,8 +70,6 @@ function Home({ setShowNavbar, base_URL }) {
 
     useEffect(() => {
 
-        setShowNavbar(false);
-
         const connect = socketIO.connect(base_URL + "/chat-zone", { transports: ['websocket'] });
         setSocket(connect);
 
@@ -81,13 +79,10 @@ function Home({ setShowNavbar, base_URL }) {
             socketEvents(connect);
         }
         localStorage.clear();
-        return () => {
-            setShowNavbar(true);
-        }
     }, [])
 
-    
-    
+
+
     const sendMessage = (e) => {
         e.preventDefault();
         const message = document.getElementById('sendMessage');

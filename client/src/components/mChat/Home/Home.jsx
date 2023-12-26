@@ -6,7 +6,7 @@ import socketIO from 'socket.io-client';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 
-function Home({ setShowNavbar, base_URL, verifyUser, message, updateMessage }) {
+function Home({ base_URL, verifyUser, message, updateMessage }) {
 
     const [socket, setSocket] = useState(null);
 
@@ -231,7 +231,6 @@ function Home({ setShowNavbar, base_URL, verifyUser, message, updateMessage }) {
     }
 
     useEffect(() => {
-        setShowNavbar(true);
         if (!authToken)
             navigate('/mChat/user')
         getSenderDetails();

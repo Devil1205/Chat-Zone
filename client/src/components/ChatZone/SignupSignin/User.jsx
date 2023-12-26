@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './Main.css'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-function User({ setShowNavbar }) {
+function User() {
     const navigate = useNavigate();
     //login user
     const loginUser = async (e) => {
@@ -12,15 +12,6 @@ function User({ setShowNavbar }) {
         localStorage.setItem('name', name);
         navigate('/chat-zone');
     }
-
-    useEffect(() => {
-        setShowNavbar(false);
-        return ()=>{
-        setShowNavbar(true);
-      }
-    }, [])
-
-
 
     return (
         <div className="user">

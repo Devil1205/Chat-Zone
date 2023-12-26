@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import './Main.css'
 
-function ForgotPassword({ base_URL, setShowNavbar, showNavbar, message, updateMessage }) {
+function ForgotPassword({ base_URL, message, updateMessage }) {
     const navigate = useNavigate();
 
     //Forgot password
@@ -32,13 +32,6 @@ function ForgotPassword({ base_URL, setShowNavbar, showNavbar, message, updateMe
         }
     }
 
-    //form display and navbar hide front end code
-    useEffect(() => {
-        setShowNavbar(false);
-        return () => {
-            setShowNavbar(true);
-        }
-    }, [showNavbar])
     return (
         <div className="user">
             <div className='loginMessage'>

@@ -15,7 +15,6 @@ function App() {
   const base_URL = "https://chat-zone-qu4q.onrender.com";
 
   const [message, setMessage] = useState("");
-  const [showNavbar, setShowNavbar] = useState(true);
   const updateMessage = (type, message) => {
     setMessage({ type, message });
     setTimeout(() => {
@@ -45,14 +44,14 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route exact path="/" element={<Home base_URL={base_URL} setShowNavbar={setShowNavbar} />} />
-        <Route exact path="/chat-zone/" element={<ChatZoneHome base_URL={base_URL} setShowNavbar={setShowNavbar} />} />
-        <Route exact path="/chat-zone/user" element={<ChatZoneUser setShowNavbar={setShowNavbar} />} />
-        <Route exact path="/mChat/" element={<MChatHome verifyUser={verifyUser} setShowNavbar={setShowNavbar} message={message} updateMessage={updateMessage} base_URL={base_URL} />} />
-        <Route exact path="/mChat/home" element={<MChatHome verifyUser={verifyUser} message={message} updateMessage={updateMessage} setShowNavbar={setShowNavbar} base_URL={base_URL} />} />
-        <Route exact path="/mChat/user" element={<MChatUser base_URL={base_URL} setShowNavbar={setShowNavbar} message={message} updateMessage={updateMessage} />} />
-        <Route exact path="/mChat/forgotPassword" element={<ForgotPassword base_URL={base_URL} setShowNavbar={setShowNavbar} message={message} updateMessage={updateMessage} />} />
-        <Route exact path="/mChat/setPassword/:token" element={<SetPassword base_URL={base_URL} setShowNavbar={setShowNavbar} message={message} updateMessage={updateMessage} />} />
+        <Route exact path="/" element={<Home base_URL={base_URL} />} />
+        <Route exact path="/chat-zone/" element={<ChatZoneHome base_URL={base_URL} />} />
+        <Route exact path="/chat-zone/user" element={<ChatZoneUser />} />
+        <Route exact path="/mChat/" element={<MChatHome verifyUser={verifyUser} message={message} updateMessage={updateMessage} base_URL={base_URL} />} />
+        <Route exact path="/mChat/home" element={<MChatHome verifyUser={verifyUser} message={message} updateMessage={updateMessage} base_URL={base_URL} />} />
+        <Route exact path="/mChat/user" element={<MChatUser base_URL={base_URL} message={message} updateMessage={updateMessage} />} />
+        <Route exact path="/mChat/forgotPassword" element={<ForgotPassword base_URL={base_URL} message={message} updateMessage={updateMessage} />} />
+        <Route exact path="/mChat/setPassword/:token" element={<SetPassword base_URL={base_URL} message={message} updateMessage={updateMessage} />} />
       </Routes>
     </Router>
   )

@@ -3,19 +3,15 @@ import { Link , useNavigate } from 'react-router-dom';
 import './Main.css'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-function User({ base_URL, setShowNavbar, showNavbar, message, updateMessage }) {
+function User({ base_URL, message, updateMessage }) {
     const navigate = useNavigate();
     const [loginText, setLoginText] = useState();
     const [loginForm, setLoginForm] = useState();
-    //form display and navbar hide front end code
+    //form display 
     useEffect(() => {
-        setShowNavbar(false);
         setLoginText(document.querySelector(".title-text .login"));
         setLoginForm(document.querySelector("form.login"));
-        return () => {
-            setShowNavbar(true);
-        }
-    }, [showNavbar])
+    }, [])
 
     //logging in user using login api endpoint
     const loginUser = async (e) => {
