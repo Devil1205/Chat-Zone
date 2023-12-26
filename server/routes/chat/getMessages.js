@@ -22,10 +22,16 @@ router.post('/messages', fetchUser, [
     if (!userExists) {
         return res.status(404).json({ error: "Unauthorized access" });
     }
+    
+    //checking if receiver exists in db
+    const receiverUser = await User.findById(receiver);
+    if (!receiverUser) {
+        return res.status(404).json({ error: "No user found" });
+    }
 
     const senderExists = await Message.findOne({ 'user.id': req.user.id });
     if (!senderExists) {
-        const temp = { messages: [], receiver };
+        const temp = { messages: [], receiver, online:{isOnline:receiverUser.isOnline, lastActive:receiverUser.lastActive} };
         return res.json(temp);
         // return res.status(404).json({ error: "Unauthorized access" });
     }
@@ -41,17 +47,17 @@ router.post('/messages', fetchUser, [
     });
 
     // console.log(receiverExists);
-    //cehcking if receiver exists
+    //cehcking if receiver exists in sender's chat list
     if (!receiverExists) {
         // console.log(updatedReceiver);   
-        const temp = { messages: [], receiver };
+        const temp = { messages: [], receiver, online:{isOnline:receiverUser.isOnline, lastActive:receiverUser.lastActive} };
         return res.json(temp);
     }
 
 
     //finding that particular uesr chat
     // const temp=[{receiver}].concat(senderExists.user.receiver[receiverIndex].messages);
-    const temp = { messages: senderExists.user.receiver[receiverIndex].messages, receiver };
+    const temp = { messages: senderExists.user.receiver[receiverIndex].messages, receiver, online:{isOnline:receiverUser.isOnline, lastActive:receiverUser.lastActive} };
     // console.log(temp);
     return res.json(temp);
 

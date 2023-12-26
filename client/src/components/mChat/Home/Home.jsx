@@ -326,7 +326,22 @@ function Home({ setShowNavbar, base_URL, verifyUser, message, updateMessage }) {
                                 <div className="backButton" onClick={goToAllChatMobile}>
                                     <ArrowBackIcon fontSize='large' sx={{ color: "white" }} />
                                 </div>
-                                <h3 className="text-center">{currChat.name}</h3>
+                                <div>
+                                    {console.log(currChat)}
+                                    <h3 className="text-center">{currChat.name}</h3>
+                                    {
+                                        currChat.online.isOnline===true ?
+                                            <div>
+                                                <div className="circle"></div>
+                                                <div>Online</div>
+                                            </div> :
+                                            
+                                            <div>
+                                                <div>Last Seen  :</div>
+                                                <div>{new Date(currChat.online.lastActive).toLocaleString()}</div>
+                                            </div>
+                                    }
+                                </div>
                             </div>
                             {
                                 currChat.messages.map((elem, ind) => {

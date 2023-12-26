@@ -5,7 +5,7 @@ const sockets = {};
 const users = {};
 
 io.of('/mChat').on('connection', socket => {
-    console.log(socket.id);
+    // console.log(socket.id);
 
     socket.on('user-online', async (id) => {
         users[socket.id]=id;
@@ -19,8 +19,9 @@ io.of('/mChat').on('connection', socket => {
 
     socket.on('disconnect', async () => {
         const user = await User.findById(users[socket.id]);
-        console.log(users[socket.id]);
+        // console.log(users[socket.id]);
         user.isOnline=false;
+        user.lastActive=Date.now();
         await user.save();
         socket.broadcast.emit('user-left');
     })
