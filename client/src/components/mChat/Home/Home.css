@@ -25,9 +25,29 @@
     border-bottom: 2px solid lightgrey;
 }
 
-.mChat-Home .allChats>div>div {
+.mChat-Home .allChats .allChatsContainer>div:nth-child(2) {
     height: 35px;
     overflow: hidden;
+}
+
+.mChat-Home .allChats .allChatsContainer>div:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mChat-Home .allChats .allChatsContainer>div>div {
+    width: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.mChat-Home .allChats .allChatsContainer .circle {
+    border-radius: 50%;
+    background-color: lime;
+    height: 10px;
+    width: 10px;
+    /* margin-left: 5px; */
 }
 
 .mChat-Home .chats .allChats>div:hover {

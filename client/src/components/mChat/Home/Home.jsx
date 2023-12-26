@@ -8,7 +8,31 @@ import { useNavigate } from 'react-router-dom';
 
 function Home({ setShowNavbar, base_URL, verifyUser, message, updateMessage }) {
 
-    const socket = socketIO.connect(base_URL + "/mChat", { transports: ['websocket'] });;
+    const [socket, setSocket] = useState(null);
+
+    const socketEvents = async (connect) => {
+        const sender = JSON.parse(localStorage.getItem('sender'));
+
+        connect.emit("user-online", sender.id);
+
+        connect.on('received', async (message) => {
+            // console.log(message);
+            const receiver = message.sender;
+            getCurrentChat(receiver);
+            getAllChats();
+        })
+
+        connect.on('user-joined', async () => {
+            // console.log("joined");
+            getAllChats();
+        })
+
+        connect.on('user-left', async () => {
+            // console.log("joined");
+            getAllChats();
+        })
+
+    }
     const [allChat, setAllChat] = useState([]);
     const [currChat, setCurrChat] = useState({ messages: null });
     const [user, setUser] = useState({});
@@ -24,15 +48,6 @@ function Home({ setShowNavbar, base_URL, verifyUser, message, updateMessage }) {
         updateMessage("success", "Logged out successfully");
         navigate('/mChat/user');
     }
-
-    socket.on('received', async (message) => {
-        // console.log(message);
-        // const sender = localStorage.getItem('sender') && JSON.parse(localStorage.getItem('sender'));
-        console.log(message);
-        const receiver = message.sender;
-        getCurrentChat(receiver);
-        getAllChats();
-    })
 
     const sendMessage = async (formElement, receiver) => {
         try {
@@ -221,11 +236,14 @@ function Home({ setShowNavbar, base_URL, verifyUser, message, updateMessage }) {
             navigate('/mChat/user')
         getSenderDetails();
         getAllChats();
-        // socket.on('sendMessage', "Pulkit");
-        socket.emit("user-online", "hey");
+
+        const connect = socketIO.connect(base_URL + "/mChat", { transports: ['websocket'] });
+        setSocket(connect);
+        socketEvents(connect);
         const search = document.getElementsByClassName('search')[0];
         verify();
         search.addEventListener('click', handleClick);
+
         return () => {
             search.removeEventListener('click', handleClick);
         }
@@ -240,7 +258,7 @@ function Home({ setShowNavbar, base_URL, verifyUser, message, updateMessage }) {
             <div className="chats">
                 <div className='homeMenu'>
                     <div className='searchBar'>
-                        <input type="text" id='search' placeholder='search' onChange={getReceiverList} />
+                        <input type="text" id='search' placeholder='search' onKeyUp={getReceiverList} />
                     </div>
                     <div className="dropdown">
                         <svg className='bi bi-three-dots-vertical dropdown-toggle' data-bs-auto-close="outside" type="button" data-bs-toggle="dropdown" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 16 16">
@@ -278,9 +296,14 @@ function Home({ setShowNavbar, base_URL, verifyUser, message, updateMessage }) {
                     {
                         allChat.map((elem, ind) => {
                             return (
-                                <div key={ind} onClick={() => { getCurrentChat(elem.receiver) }}>
+                                <div className='allChatsContainer' key={ind} onClick={() => { getCurrentChat(elem.receiver) }}>
                                     {/* {console.log(elem)} */}
-                                    <h4>{elem.name}</h4>
+                                    <div>
+                                        <h4>{elem.name}</h4>
+                                        {elem.online.isOnline && <div>
+                                            <div className="circle"></div>
+                                        </div>}
+                                    </div>
                                     <div>{elem.content}</div>
                                 </div>
                             )

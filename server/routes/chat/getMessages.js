@@ -18,14 +18,14 @@ router.post('/messages', fetchUser, [
     const { receiver } = req.body;
 
     //checking if sender exists in db
-    const userExists = await User.findById( req.user.id );
+    const userExists = await User.findById(req.user.id);
     if (!userExists) {
         return res.status(404).json({ error: "Unauthorized access" });
     }
 
-    const senderExists = await Message.findOne( {'user.id':req.user.id} );
+    const senderExists = await Message.findOne({ 'user.id': req.user.id });
     if (!senderExists) {
-        const temp={messages: [], receiver};
+        const temp = { messages: [], receiver };
         return res.json(temp);
         // return res.status(404).json({ error: "Unauthorized access" });
     }
@@ -44,14 +44,14 @@ router.post('/messages', fetchUser, [
     //cehcking if receiver exists
     if (!receiverExists) {
         // console.log(updatedReceiver);   
-        const temp={messages: [], receiver};
+        const temp = { messages: [], receiver };
         return res.json(temp);
     }
 
 
     //finding that particular uesr chat
     // const temp=[{receiver}].concat(senderExists.user.receiver[receiverIndex].messages);
-    const temp={messages: senderExists.user.receiver[receiverIndex].messages, receiver};
+    const temp = { messages: senderExists.user.receiver[receiverIndex].messages, receiver };
     // console.log(temp);
     return res.json(temp);
 
@@ -70,17 +70,30 @@ router.get('/allMessages', fetchUser,
 
         const allMessages = [];
 
-        senderExists.user.receiver.forEach((elem, ind) => {
-            const lastMessage = elem.messages[elem.messages.length-1];
-            const updatedLastMessage = {
-                receiver: elem.id,
-                content: lastMessage.content,
-                type: lastMessage.type,
-                date: lastMessage.date
-            };
-            // console.log(updatedLastMessage);
-            allMessages.push(updatedLastMessage);
-        })
+        for (const elem of senderExists.user.receiver) {
+            const lastMessage = elem.messages[elem.messages.length - 1];
+            try {
+                const online = await User.findById(elem.id);
+                const updatedLastMessage = {
+                    receiver: elem.id,
+                    content: lastMessage.content,
+                    type: lastMessage.type,
+                    date: lastMessage.date,
+                    online: {
+                        isOnline: online.isOnline,
+                        lastActive: online.lastActive
+                    }
+                };
+                // console.log(online);
+                // console.log(updatedLastMessage);
+                allMessages.push(updatedLastMessage);
+            }
+            catch (e) {
+                console.log(e);
+                return res.status(404).json(allMessages);
+            }
+        }
+
         return res.status(200).json(allMessages);
     })
 module.exports = router;
