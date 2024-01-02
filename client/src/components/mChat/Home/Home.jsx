@@ -43,9 +43,11 @@ function Home({ base_URL, verifyUser, message, updateMessage }) {
     const navigate = useNavigate();
 
     const logoutUser = () => {
+        const sender = localStorage.getItem('sender') && JSON.parse(localStorage.getItem('sender'));
         localStorage.removeItem('auth-token');
         setUser(false);
         updateMessage("success", "Logged out successfully");
+        socket.emit('user-left', sender.id)
         navigate('/mChat/user');
     }
 
@@ -299,7 +301,7 @@ function Home({ base_URL, verifyUser, message, updateMessage }) {
                                     {/* {console.log(elem)} */}
                                     <div>
                                         <h4>{elem.name}</h4>
-                                        {elem.online.isOnline && <div>
+                                        {elem.online.isOnline === true && <div>
                                             <div className="circle"></div>
                                         </div>}
                                     </div>
@@ -326,15 +328,15 @@ function Home({ base_URL, verifyUser, message, updateMessage }) {
                                     <ArrowBackIcon fontSize='large' sx={{ color: "white" }} />
                                 </div>
                                 <div>
-                                    {console.log(currChat)}
+                                    {/* {console.log(currChat)} */}
                                     <h3 className="text-center">{currChat.name}</h3>
                                     {
-                                        currChat.online.isOnline===true ?
+                                        currChat.online.isOnline === true ?
                                             <div>
                                                 <div className="circle"></div>
                                                 <div>Online</div>
                                             </div> :
-                                            
+
                                             <div>
                                                 <div>Last Seen  :</div>
                                                 <div>{new Date(currChat.online.lastActive).toLocaleString()}</div>
@@ -346,7 +348,7 @@ function Home({ base_URL, verifyUser, message, updateMessage }) {
                                 currChat.messages.map((elem, ind) => {
                                     if (ind === currChat.messages.length - 1) { scrollToBottom() }
                                     return (
-                                        <div key={ind} className={elem.type}>{elem.content}</div>
+                                        <div key={ind} className={elem.type}>{elem.content}<span>{new Date(elem.time).toLocaleTimeString().slice(0, 5) + new Date(elem.time).toLocaleTimeString().slice(8, 11)}</span></div>
                                     )
                                 })
                             }

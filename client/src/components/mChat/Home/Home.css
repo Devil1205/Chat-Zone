@@ -76,6 +76,7 @@
     font-weight: 400;
     display: flex;
     align-items: center;
+    z-index: 1;
 }
 
 .mChat-Home .chat .messages .nameHeading>div:nth-child(2) {
@@ -106,6 +107,32 @@
 
 .mChat-Home .chat .messages .received {
     background-color: #6659ad;
+}
+
+.mChat-Home .chat .messages .sent,
+.mChat-Home .chat .messages .received {
+    margin: 5px 10px;
+    background: #622765;
+    border: 2px solid black;
+    border-radius: 5px;
+    max-width: 85%;
+    width: fit-content;
+    padding: 5px 10px;
+    overflow-wrap: anywhere;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    min-width: 100px;
+}
+
+.mChat-Home .chat .messages .sent span,
+.mChat-Home .chat .messages .received span {
+    font-size: 12px;
+    font-weight: 400;
+    position: relative;
+    overflow-wrap: normal;
+    top: 5px;
+    margin-left: 10px;
 }
 
 .mChat-send {

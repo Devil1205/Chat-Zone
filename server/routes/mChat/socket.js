@@ -19,10 +19,27 @@ io.of('/mChat').on('connection', socket => {
 
     socket.on('disconnect', async () => {
         const user = await User.findById(users[socket.id]);
-        // console.log(users[socket.id]);
-        user.isOnline=false;
-        user.lastActive=Date.now();
-        await user.save();
+        // console.log(socket.id);
+        try{
+            user.isOnline=false;
+            user.lastActive=Date.now();
+            await user.save();
+        }
+        catch(e)
+        {}
+        socket.broadcast.emit('user-left');
+    })
+
+    socket.on('user-left', async (id) => {
+        const user = await User.findById(id);
+        // console.log(socket.id);
+        try{
+            user.isOnline=false;
+            user.lastActive=Date.now();
+            await user.save();
+        }
+        catch(e)
+        {}
         socket.broadcast.emit('user-left');
     })
 
