@@ -156,7 +156,7 @@ function Home({ base_URL, verifyUser, message, updateMessage }) {
         setTimeout(() => {
             const messages = document.getElementsByClassName('messages')[0].childNodes[currChat.messages.length];
             messages.scrollIntoView();
-            console.log(messages);
+            // console.log(messages);
         }, 0);
     };
 
@@ -339,7 +339,7 @@ function Home({ base_URL, verifyUser, message, updateMessage }) {
 
                                             <div>
                                                 <div>Last Seen  :</div>
-                                                <div>{new Date(currChat.online.lastActive).toLocaleString()}</div>
+                                                <div>{new Date(currChat.online.lastActive).toLocaleDateString()+", "+new Date(currChat.online.lastActive).toTimeString().slice(0,5)}</div>
                                             </div>
                                     }
                                 </div>
@@ -348,7 +348,7 @@ function Home({ base_URL, verifyUser, message, updateMessage }) {
                                 currChat.messages.map((elem, ind) => {
                                     if (ind === currChat.messages.length - 1) { scrollToBottom() }
                                     return (
-                                        <div key={ind} className={elem.type}>{elem.content}<span>{new Date(elem.time).toLocaleTimeString().slice(0, 5) + new Date(elem.time).toLocaleTimeString().slice(8, 11)}</span></div>
+                                        <div key={ind} className={elem.type}>{elem.content}<span>{new Date(elem.time).toTimeString().slice(0, 5)}</span></div>
                                     )
                                 })
                             }
