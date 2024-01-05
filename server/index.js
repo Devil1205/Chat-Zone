@@ -28,6 +28,7 @@ app.use('/mChatAuthAPI',require('./routes/user/loginUser'));
 app.use('/mChatAuthAPI',require('./routes/user/verifyUser'));
 app.use('/mChatAuthAPI',require('./routes/user/forgotPassword'));
 app.use('/mChatMessageAPI',require('./routes/chat/addMessage'));
+app.use('/mChatMessageAPI',require('./routes/chat/deleteMessage'));
 app.use('/mChatMessageAPI',require('./routes/chat/getMessages'));
 app.use('/mChatMessageAPI',require('./routes/chat/userDetails'));
 

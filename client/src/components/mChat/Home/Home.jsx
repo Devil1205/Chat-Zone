@@ -5,10 +5,15 @@ import axios from 'axios';
 import socketIO from 'socket.io-client';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
+import Checkbox from '@mui/material/Checkbox';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CloseIcon from '@mui/icons-material/Close';
 
 function Home({ base_URL, verifyUser, message, updateMessage }) {
 
     const [socket, setSocket] = useState(null);
+
+    const selectedMessages = [];
 
     const socketEvents = async (connect) => {
         const sender = JSON.parse(localStorage.getItem('sender'));
@@ -232,6 +237,50 @@ function Home({ base_URL, verifyUser, message, updateMessage }) {
         setUser(result);
     }
 
+    const selectMessage = (e, id) => {
+        selectedMessages.push({ id: id, selected: e.target.checked });
+        console.log(selectedMessages);
+    }
+
+    const hideSelectMessage = () => {
+        const messages = document.querySelectorAll('#selectMessage');
+        messages && messages.forEach(elem => {
+            elem.style.display = "none";
+        })
+        const deleteMessage = document.querySelector('.deleteMessage');
+        deleteMessage?deleteMessage.style.display = "none":"";
+    }
+
+    const showSelectMessage = () => {
+        const messages = document.querySelectorAll('#selectMessage');
+        messages.forEach(elem => {
+            elem.style.display = "block";
+        })
+        const deleteMessage = document.querySelector('.deleteMessage');
+        deleteMessage.style.display = "flex";
+    }
+
+    const deleteMessage = async () => {
+        try {
+            const body = JSON.stringify({ receiver: currChat.receiver, message: selectedMessages });
+            console.log(body);
+            const response = await fetch(base_URL + "/mChatMessageAPI/message",
+                {
+                    method: "DELETE",
+                    body,
+                    headers: { "Content-type": "application/json", "auth-token": authToken },
+                }
+            )
+            const responseJson = await response.json();
+            console.log(responseJson);
+            hideSelectMessage();
+            getCurrentChat(currChat.receiver);
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
+
     useEffect(() => {
         if (!authToken)
             navigate('/mChat/user')
@@ -278,7 +327,7 @@ function Home({ base_URL, verifyUser, message, updateMessage }) {
                                 return (
                                     <div key={index}>
                                         <div>{receiver.name}</div>
-                                        <div onClick={() => { getCurrentChat(receiver._id) }}>Chat</div>
+                                        <div onClick={() => { hideSelectMessage();getCurrentChat(receiver._id) }}>Chat</div>
                                     </div>
                                 )
                             }) : <div>Not found</div>}
@@ -297,7 +346,7 @@ function Home({ base_URL, verifyUser, message, updateMessage }) {
                     {
                         allChat.map((elem, ind) => {
                             return (
-                                <div className='allChatsContainer' key={ind} onClick={() => { getCurrentChat(elem.receiver) }}>
+                                <div className='allChatsContainer' key={ind} onClick={() => { hideSelectMessage();getCurrentChat(elem.receiver) }}>
                                     {/* {console.log(elem)} */}
                                     <div>
                                         <h4>{elem.name}</h4>
@@ -339,16 +388,23 @@ function Home({ base_URL, verifyUser, message, updateMessage }) {
 
                                             <div>
                                                 <div>Last Seen  :</div>
-                                                <div>{new Date(currChat.online.lastActive).toLocaleDateString()+", "+new Date(currChat.online.lastActive).toTimeString().slice(0,5)}</div>
+                                                <div>{new Date(currChat.online.lastActive).toLocaleDateString() + ", " + new Date(currChat.online.lastActive).toTimeString().slice(0, 5)}</div>
                                             </div>
                                     }
                                 </div>
+                            </div>
+                            <div className="deleteMessage">
+                                <div onClick={hideSelectMessage}><CloseIcon /></div>
+                                <div onClick={deleteMessage}><DeleteIcon /></div>
                             </div>
                             {
                                 currChat.messages.map((elem, ind) => {
                                     if (ind === currChat.messages.length - 1) { scrollToBottom() }
                                     return (
-                                        <div key={ind} className={elem.type}>{elem.content}<span>{new Date(elem.time).toTimeString().slice(0, 5)}</span></div>
+                                        <div key={ind} className={`singleMessage align-${elem.type}`}>
+                                            <div id='selectMessage'><Checkbox sx={{ color: "white" }} onChange={(e) => { selectMessage(e, elem._id) }} /></div>
+                                            <div className={elem.type} onDoubleClick={showSelectMessage}>{elem.content}<span>{new Date(elem.time).toTimeString().slice(0, 5)}</span></div>
+                                        </div>
                                     )
                                 })
                             }
